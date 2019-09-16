@@ -25,35 +25,45 @@ int main(void)
 	
   System_Clock_Init(); // Switch System Clock = 80 MHz
 	UART2_Init();
-	// InitTimer();
-	// InitGPIO();
+	InitGPIO();
+	InitTimer();
 	
 	/*
 		Main program loop
 	*/
+	
+	USART_Write (USART2, (uint8_t*)"Start of program.\n\r", BufferSize);
 	while (1)
 	{
-#ifdef DEBUG_MODE
-		{
+//#ifdef DEBUG_MODE
+		
 			/*
 				Debug Mode -> Sandbox to test timers, GPIO and other functionality.
 				Preprocessor macro will ensure sandbox code is not compiled.
 			*/
 			
-			for (uint8_t test = 0; test < 25; test++)
+			
+			while(1)
 			{
-				// USART_WriteUInt8(USART2, test);
-				// USART_Write (USART2, (uint8_t*)"\n\r", BufferSize);
+				if (TIM2->SR & TIM_SR_CC1IF || 1)
+				{
+					uint16_t time = TIM2->CCR1;
+					
+					USART_WriteUInt16(USART2, time);
+					USART_Write (USART2, (uint8_t*)"\t\t\t", BufferSize);
+					
+					uint16_t cnt = TIM2->CNT;
+					
+					USART_WriteUInt16(USART2, cnt);
+					USART_Write (USART2, (uint8_t*)"\n\r", BufferSize);
+				}
 			}
 			
-			while(1){
-				
-			}
 			
 			// USART_Write (USART2, (uint8_t*)"Upper Limit: 00\n\r", BufferSize);
 			// USART_Write (USART2, (uint8_t*)"Lower Limit: 00\n\r", BufferSize);
-		}
-#else
+		
+//#else
 		{
 			// On startup, the program displays the upper and lower limits 
 			//		and allows the user to either accept those values or to 
@@ -87,7 +97,7 @@ int main(void)
 			}
 			*/
 		}
-#endif
+//#endif
 	}
 }
 

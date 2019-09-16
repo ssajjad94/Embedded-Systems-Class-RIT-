@@ -4,6 +4,9 @@
 void InitGPIO()
 {
   // Using GPIO PortA Pin 0
+	
+	// Enable the peripheral clock of GPIO Port
+	RCC->AHB2ENR |=   RCC_AHB2ENR_GPIOAEN;
   
   // Set MODER to use Alt function
   GPIOA->MODER &= ~GPIO_MODER_MODER0;
