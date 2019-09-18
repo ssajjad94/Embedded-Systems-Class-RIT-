@@ -11,7 +11,7 @@ void InitTimer()
   RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN;
   
   // Load prescaler value into the TIMx->PSC reg.
-  TIM2->PSC = 1800; //79
+  TIM2->PSC = 79; //79
   
   // Update new prescaler value using an update event, TIMx->EGR reg.
   TIM2->EGR |= TIM_EGR_UG;
@@ -28,7 +28,7 @@ void InitTimer()
 	TIM2->CCMR1 &= ~TIM_CCMR1_IC1F;
 	
   // Enable inpute capture (on Capture/Compare 1)
-  TIM2->CCER |= (1<<1 | 1<<3);
+  //TIM2->CCER |= (1<<1 | 1<<3);
 		//0x1;
 		
 	// Program the input prescaler (to 0)  (from textbook)
@@ -41,7 +41,7 @@ void InitTimer()
 	// TIM2->DIER |= TIM_DIER_CC1IE;
 	
 	// Enable DMA														 (from textbook)
-	TIM2->DIER |= TIM_DIER_CC1DE;
+	//TIM2->DIER |= TIM_DIER_CC1DE;
 	
 	// Enable counter on TIM2 
 	TIM2->CR1 |= TIM_CR1_CEN;

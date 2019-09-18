@@ -102,12 +102,20 @@ uint8_t USART_Read (USART_TypeDef * USARTx) {
 	// SR_RXNE (Read data register not empty) bit is set by hardware
 	while (!(USARTx->ISR & USART_ISR_RXNE));  // Wait until RXNE (RX not empty) bit is set
 	// USART resets the RXNE flag automatically after reading DR
-	return ((uint8_t)(USARTx->RDR & 0xFF));
+	uint8_t rxChar[2];
+	rxChar[0] = (uint8_t)(USARTx->RDR & 0xFF);
+	rxChar[1] = 0x00;
 	// Reading USART_DR automatically clears the RXNE flag 
+	
+	USART_Write(USARTx, rxChar);
+	return (rxChar[0]);
 }
 
-void USART_Write(USART_TypeDef * USARTx, uint8_t *buffer, uint32_t nBytes) {
+void USART_Write(USART_TypeDef * USARTx, uint8_t *buffer) 
+{
 	int i;
+	uint32_t nBytes = BUFFER_SIZE;
+	
 	// TXE is cleared by a write to the USART_DR register.
 	// TXE is set by hardware when the content of the TDR 
 	// register has been transferred into the shift register.
@@ -166,8 +174,10 @@ void USART_WriteUInt8(USART_TypeDef * USARTx, uint8_t num)
     numTemp = numTemp % 10;
     
     // Write it
-    char numChar = '0' + numTemp;
-    USART_Write(USARTx, (uint8_t *)(&numChar) , 2);
+    char numChar[2];
+		numChar[0] = '0' + numTemp;
+		numChar[1] = 0x00;
+    USART_Write(USARTx, (uint8_t *)(numChar));
   }
 }
 
@@ -205,7 +215,7 @@ void USART_WriteUInt16(USART_TypeDef * USARTx, uint16_t num)
     
     // Write it
     char numChar = '0' + numTemp;
-    USART_Write(USARTx, (uint8_t *)(&numChar) , 2);
+    USART_Write(USARTx, (uint8_t *)(&numChar));
   }
 }
 

@@ -14,6 +14,6 @@ void InitGPIO()
   
   // Set AFR (Alternate Function) to use AF1 (TIM2_CH1)
   // GPIOA->AFR[1] |= GPIO_AFRH_AFRH1;
-  GPIOA->AFR[0] |= GPIO_AFRL_AFRL1;
+  GPIOA->AFR[0] |= 0x1;
 }
 
