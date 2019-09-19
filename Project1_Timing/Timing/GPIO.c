@@ -17,3 +17,9 @@ void InitGPIO()
   GPIOA->AFR[0] |= 0x1;
 }
 
+int read_pa0( void )
+{
+	// read the bottom bit of the GPIOA input lines which is PA0.
+	// returns 1 if high, 0 if low.
+	return GPIOA->IDR & 1 ;	
+}

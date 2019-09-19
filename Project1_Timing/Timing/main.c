@@ -1,27 +1,6 @@
-#include "stm32l476xx.h"
+#include "main.h"
 
-#include <string.h>
-#include <stdio.h>
-
-#include "SysClock.h"
-#include "LED.h"
-#include "UART.h"
-#include "timer.h"
-#include "GPIO.h"
-
-#define PRINT(x)					USART_Write(USART2, (uint8_t*)x)
-#define PRINT_UINT16(x)		USART_WriteUInt16(USART2, x);
-
-//#define DEBUG_MODE
-
-char RxComByte = 0;
-uint8_t buffer[BufferSize];
-
-int read_pa0( void )
-{
-	return GPIOA->IDR & 1 ;				// read the bottom bit of the GPIOA input lines which is PA0.
-																// returns 1 if high, 0 if low.
-}
+// #define DEBUG_MODE
 
 int main(void)
 {
@@ -41,51 +20,59 @@ int main(void)
 				Debug Mode -> Sandbox to test timers, GPIO and other functionality.
 				Preprocessor macro will ensure sandbox code is not compiled.
 			*/
-			
-	
-			uint16_t prevCnt = 0;
-			uint16_t nums[100];
-			uint16_t numsCounted = 0;
-			
-			while(numsCounted < 100)
 			{
-				if (TIM2->SR & TIM_SR_CC1IF)
+				PRINT("\n\n\r DEBUGGING \n\n\r");
+				
+				uint16_t prevCnt = 0;
+				uint16_t nums[100];
+				uint16_t numsCounted = 0;
+				
+				while(numsCounted < 100)
 				{
-					uint16_t time = TIM2->CCR1;
-					
-//					USART_WriteUInt16(USART2, time);
-//					USART_Write (USART2, (uint8_t*)"\t\t\t");
-					
-					
-					uint16_t cnt = time ;
-					uint16_t elapsedCnt = cnt - prevCnt;
-					prevCnt = cnt;
-					
-					nums[numsCounted] = elapsedCnt;
-					
-					numsCounted += 1;
-					
-					//USART_WriteUInt16(USART2, elapsedCnt);
-					//USART_Write (USART2, (uint8_t*)"\n\r");
+					if (IsCaptureEventFlagSet())
+					{
+						uint16_t time = GetCaptureEventTimer();
+						
+	//					USART_WriteUInt16(USART2, time);
+	//					USART_Write (USART2, (uint8_t*)"\t\t\t");
+						
+						
+						uint16_t cnt = time ;
+						uint16_t elapsedCnt = cnt - prevCnt;
+						prevCnt = cnt;
+						
+						nums[numsCounted] = elapsedCnt;
+						
+						numsCounted += 1;
+						
+						//USART_WriteUInt16(USART2, elapsedCnt);
+						//USART_Write (USART2, (uint8_t*)"\n\r");
+					}
 				}
+				
+				for (int i =0; i < 100; i++)
+				{
+					USART_WriteUInt16(USART2, nums[i]);
+					USART_Write (USART2, (uint8_t*)"\n\r");
+				}
+				
+				while(1){};
+			
 			}
-			
-			for (int i =0; i < 100; i++)
-			{
-				USART_WriteUInt16(USART2, nums[i]);
-				USART_Write (USART2, (uint8_t*)"\n\r");
-			}
-			
-			while(1){};
-			
-			
-			// USART_Write (USART2, (uint8_t*)"Upper Limit: 00\n\r");
-			// USART_Write (USART2, (uint8_t*)"Lower Limit: 00\n\r");
 #endif
 	
 	/*
 		Power-On Self Test
 	 */
+	
+	PRINT("\n\r");
+	PRINT(HEADERLINE);
+	
+	PRINT("\t\tWelcome to the Project 1 - Timing program.\n\r");
+	
+	PRINT(HEADERLINE);
+	PRINT("\n\r");
+	
 	
 	// When the program starts, execute a Power On Self Test (POST)
 	// This test will confirm that the GPIO port is seeing pulses 
@@ -93,17 +80,35 @@ int main(void)
 	// If it fails, then over the option to try again.
 	// If it succeeds, proceed to main program loop.
 	
+	PRINT("Performing Power On Self Test....\n\r");
 	
+	uint8_t bPOSTSuccessful = PerformPOST();
+	
+	if (bPOSTSuccessful == 0)
+	{
+		// Ask the user if they would like to continue anyway
+		uint8_t confirmChar = PromptYesOrNo( (uint8_t *) "The POST test failed. Would you like to continue anyway? (y/n):\t");
+		
+		// If yes, break. If no, prompt for a new value.
+		if (confirmChar == 'n')
+		{
+			PRINT("Goodbye.\n\r\n\r");
+			return 1;
+		}
+	}
 	
 	/*
 		Main program loop
 	*/
+
+	uint16_t uLimit = LOWER_LIMIT_DEFAULT + 100;     // upper limit
+	uint16_t lLimit = LOWER_LIMIT_DEFAULT;     			 // lower limit
 	
-	uint16_t uLimit = 1050;     // upper limit
-	uint16_t lLimit = 950;     // lower limit
+	// Loop for each iteration of program execute (the would you like to repeat at the end)
+		// Loop ends when the user prompts to not repeat, exiting the program.
+	uint8_t bRepeatMainProgram = 1;
 	
-	PRINT("\n\n\rStart of program.\n\r");
-	while (1)
+	while (bRepeatMainProgram)
 	{
 		// On startup, the program displays the upper and lower limits 
 		//		and allows the user to either accept those values or to 
@@ -111,9 +116,15 @@ int main(void)
 		// The lower limit can be from 50 ms to 9950 ms. 
 		// The upper limit will always be 100 ms longer than the lower limit
 		
-		while(1) // Loop until the user confirms the limits.
+		// Verify limits
+		// Loop until the user confirms these limits.
+		uint8_t bRepeatLimitVerificaton = 1;
+		while(bRepeatLimitVerificaton) 
 		{
 			// Print current limits
+			
+			PRINT("\n\r");
+			
 			PRINT("Upper Limit: ");
 			PRINT_UINT16(uLimit);
 			PRINT("\n\r");
@@ -123,75 +134,30 @@ int main(void)
 			PRINT("\n\r");
 			
 			// Ask the user to confirm or if they want to change the limits
-			uint8_t confirmChar = 0;	// ConfirmChar keeps track of the user's response y/n
-			while (1) 		// Loop until the user inputs a valid value
-			{
-				char rxByte = 0;
-				
-				PRINT("Would you like to continue using these values? (y/n):\t");
-				while (rxByte != '\n' && rxByte != '\r')
-				{
-					rxByte = USART_Read(USART2);
-					
-					if(rxByte == 'y' || rxByte == 'Y' || rxByte == 'n' || rxByte == 'N')
-						confirmChar = rxByte;
-				} 
-				PRINT("\n\r");
-				
-				// Check if we're looping: If there's a valid input, break out of the loop
-				if(confirmChar != 0)
-					break;
-				else
-					PRINT("Please input y or n\n\r");
-			} 
+			uint8_t confirmChar = PromptYesOrNo( (uint8_t *) "Would you like to continue using these values? (y/n):\t");
 			
 			// If yes, break. If no, prompt for a new value.
 			if (confirmChar == 'y' || confirmChar == 'Y')
 			{
+				bRepeatLimitVerificaton = 0;
 				break;
 			}
 			else
 			{
-				// Prompt the user to enter a new upper limit. 
-				uint16_t limit = 0;
-				while(1)	// Loop until the user inputs a valid limit.
-				{
-					char rxByte = 0;
-					PRINT("Please enter a new lower limit. (50-9950)\t");
-					limit = 0;
-					rxByte = USART_Read(USART2);
-					while (rxByte != '\n' && rxByte != '\r')
-					{
-						if (rxByte >= '0' && rxByte <= '9')
-							limit = limit * 10 + (rxByte - '0');
-						rxByte = USART_Read(USART2);
-					} 
-					
-					// Check if we're looping: if there's a valid limit, break out of the loop
-					if (limit < 50 || limit > 9950)
-						PRINT("Upper Limit must be within the range of 50-9950\n\r");
-					else
-					{
-						lLimit = limit;
-						uLimit = lLimit + 100;
-						break;
-					}
-				}
+				lLimit = PromptForLimit(LOWER_LIMIT_MIN, LOWER_LIMIT_MAX);
+				uLimit = lLimit + 100;
 			}
-			
-			PRINT("\n\r");
 		} 
-		
-		// At this point, we have the user-deisred upper limit and lower limit
 		
 		// Waits for the user to press the Enter key
 		{
-			PRINT("Press ENTER to begin....\n\r");
+			PRINT("Press ENTER to begin....");
 			char rxByte = 0;
 			while (rxByte != '\n' && rxByte != '\r')
 			{
 				rxByte = USART_Read(USART2);
 			}
+			PRINT("\n\r");
 		}
 		
 		// Initialize the empty buckets
@@ -203,17 +169,18 @@ int main(void)
 			buckets[i] = 0;
 		}
 		
-		// Perform the 1001 measurements (ignore the first 1 for 1000 measurements)s
+		// Perform the 1001 measurements (ignore the first 1 for 1000 measurements)
 		uint16_t measurementCnt = 0;
 		uint16_t prevTime = 0;
 		while(measurementCnt < 1001)
 		{
-			if (TIM2->SR & TIM_SR_CC1IF)
+			if (IsCaptureEventFlagSet())
 			{
-				uint16_t time = TIM2->CCR1;
+				// Find the elapsed time
+				uint16_t time = GetCaptureEventTimer();
 				uint16_t elapsedTime = time - prevTime;
-				prevTime = time;
 				
+				// Add it to the bucket (if applicable)
 				if (measurementCnt > 0)
 				{
 					if (elapsedTime >= lLimit && elapsedTime <= uLimit)
@@ -223,16 +190,22 @@ int main(void)
 					}
 				}
 				
+				// Set values for iteration
+				prevTime = time;
 				measurementCnt += 1;
 			}
 		}
 		
 		// After completing the 1000 measurements (1001 rising edges) the program
 		//		displays ever non-zero bucketvia Putty. 
+		PRINT("\n\rHere are your buckets:\n\r");
+		uint8_t bHasBucket = 0;
 		for (int i = 0; i < 101; i++)
 		{
 			if (buckets[i] != 0)
 			{
+				bHasBucket = 1; 
+				
 				uint16_t time = lLimit + i;
 				PRINT_UINT16(time);
 				PRINT("ms\t");
@@ -241,8 +214,177 @@ int main(void)
 				PRINT("\n\r");
 			}
 		}
+		if (bHasBucket == 0)
+		{
+			PRINT("\tThere are no non-empty buckets.\n\r");
+		}
+		PRINT("\n\r");
 		
 		// Prompt the user if they want to run again.
+		{
+			uint8_t confirmChar = PromptYesOrNo( (uint8_t *) "Would you like to run again? (y/n):\t");
+			
+			// If yes, break. If no, prompt for a new value.
+			if (confirmChar == 'y' || confirmChar == 'Y')
+			{
+				continue;
+			}
+			else
+			{
+				bRepeatMainProgram = 0;
+			}
+		}
+	} // end of MainProgramLoop
+	
+	PRINT("Goodbye.\n\r\n\r");
+	return 0;
+}
+
+
+/*
+	Prompts the user a given prompt, and loops until a y or n is returned.
+
+	returns 'y' or 'n'
+*/
+uint8_t PromptYesOrNo(uint8_t* prompt)
+{
+	uint8_t retVal = 0;
+	
+	// Loop until the user inputs a valid value
+	while (retVal == 0)
+	{
+		// rxByte holds the read char within this scope.
+		char rxByte = 0;
+		
+		// Try to read an input
+		PRINT(prompt);
+		while (rxByte != '\n' && rxByte != '\r')
+		{
+			rxByte = USART_Read(USART2);
+			
+			if(rxByte == 'y' || rxByte == 'Y' || rxByte == 'n' || rxByte == 'N')
+				retVal = rxByte;
+		} 
+		PRINT("\n\r");
+	} 
+	
+	if (retVal == 'Y')
+		retVal = 'y';
+	
+	if (retVal == 'N')
+		retVal = 'n';
+	
+	return retVal;
+}
+
+
+/*
+	Performs the POST test
+*/
+uint8_t PerformPOST(void)
+{
+	// Loop until the POST is done or abandoned
+	uint8_t bPostTestSuccessful = 0;
+	
+	uint8_t bRepeatPostTest = 1;
+	while(bRepeatPostTest)
+	{
+		uint16_t prevTime = 0;
+		uint16_t cnt = 0;
+		
+		// Start the POST test
+		uint8_t bRunningPostTest = 1;
+		while (bRunningPostTest == 1)
+		{
+			if (IsCaptureEventFlagSet())
+			{
+				cnt += 1;
+				
+				uint16_t time = GetCaptureEventTimer();
+				uint16_t elapsedTime = time - prevTime;
+				prevTime = time;
+				
+				if (elapsedTime < POST_TIME_MS)
+				{
+					// We did it! The POST was successful.
+					bPostTestSuccessful = 1;
+					bRunningPostTest = 0;
+					
+					PRINT("POST test ran successfully.\n\r");
+					
+					return (bPostTestSuccessful);
+				} 
+				else
+				{
+					// If this was a failed case and we exceeded a certain number of attempts, 
+					//		call this a failure.
+					if (cnt > POST_TIMEOUT_MAXCOUNT)
+					{
+						bPostTestSuccessful = 0;
+						bRunningPostTest = 0;
+					}
+				}
+			}
+		}
+		
+		// If the POST failed, prompt the user to try again.
+		if (bPostTestSuccessful == 0)
+		{
+			uint8_t confirmChar = PromptYesOrNo( (uint8_t *) "Failed to verify POST test. Would you like to try again? (y/n):\t");
+			
+			if (confirmChar == 'n' || confirmChar == 'N')
+				bRepeatPostTest = 0;
+		}
 	}
+	
+	return bPostTestSuccessful;
+}	
+
+
+
+/*
+ */
+uint16_t PromptForLimit(uint16_t minLimit, uint16_t maxLimit)
+{
+	// Prompt the user to enter a new upper limit. 
+	uint16_t limit = 0;
+	
+	// Loop until the user inputs a valid limit.
+	while(limit < minLimit || limit > maxLimit)
+	{
+		// rxByte holds the read char within this scope.
+		char rxByte = 0;
+		limit = 0;
+		
+		// Try to read an input
+		PRINT("Please enter a new lower limit. (");
+		PRINT_UINT16(minLimit);
+		PRINT("-");
+		PRINT_UINT16(maxLimit);
+		PRINT(")\t");
+		while (rxByte != '\n' && rxByte != '\r')
+		{
+			// If we have a digit value, increase the significance of the previous inputs by a digit
+				// and append the current input's value.
+			if (rxByte >= '0' && rxByte <= '9')
+				limit = limit * 10 + (rxByte - '0');
+			
+			rxByte = USART_Read(USART2);
+		} 
+		PRINT("\n\r");
+		
+		// Check if the number given is valid.
+		if (limit < 50 || limit > 9950)
+		{
+			// If the limit is invalid, reiterate the condition and loop.
+			PRINT("Lower Limit must be within the range of ");
+			PRINT_UINT16(minLimit);
+			PRINT("-");
+			PRINT_UINT16(maxLimit);
+			PRINT(".\n\r");
+		}
+	}
+	
+	return limit;
 }
 

@@ -5,4 +5,7 @@
 
 void InitGPIO(void);
 
+// From PA0_Input_Verification
+int read_pa0(void);
+
 #endif

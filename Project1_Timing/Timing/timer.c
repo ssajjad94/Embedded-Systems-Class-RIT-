@@ -47,3 +47,16 @@ void InitTimer()
 	TIM2->CR1 |= TIM_CR1_CEN;
 	
 }
+
+uint8_t IsCaptureEventFlagSet(void)
+{
+	if(TIM2->SR & TIM_SR_CC1IF)
+		return 1;
+	else
+		return 0;
+}
+
+uint16_t GetCaptureEventTimer(void)
+{
+	return TIM2->CCR1;
+}
