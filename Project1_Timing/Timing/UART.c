@@ -143,42 +143,7 @@ void USART_Write(USART_TypeDef * USARTx, uint8_t *buffer)
 
 void USART_WriteUInt8(USART_TypeDef * USARTx, uint8_t num)
 {
-  // Count the number of digits
-  uint8_t myNum = num;
-  uint8_t digits = 0;
-  if (num == 0)
-  {
-    digits = 1;
-  }
-  else
-  {
-    while (myNum != 0)
-    {
-      digits += 1;
-      myNum = myNum / 10;
-    }
-  }
-  
-  // Convert each digit from left to right to a char and print it.
-  for (int i = digits  -1; i >= 0; i--)
-  {
-    uint8_t numTemp = num;
-    
-    // Get the wanted bit to the 0th palce
-    for (int j = 0; j < i; j++)
-    {
-      numTemp = numTemp / 10;
-    }
-    
-    // Isolate the digit
-    numTemp = numTemp % 10;
-    
-    // Write it
-    char numChar[2];
-		numChar[0] = '0' + numTemp;
-		numChar[1] = 0x00;
-    USART_Write(USARTx, (uint8_t *)(numChar));
-  }
+  USART_WriteUInt16(USARTx, (uint16_t) num);
 }
 
 void USART_WriteUInt16(USART_TypeDef * USARTx, uint16_t num)

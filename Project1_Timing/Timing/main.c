@@ -113,8 +113,8 @@ int main(void)
 		// On startup, the program displays the upper and lower limits 
 		//		and allows the user to either accept those values or to 
 		//		change the lower limit to a new value.
-		// The lower limit can be from 50 ms to 9950 ms. 
-		// The upper limit will always be 100 ms longer than the lower limit
+		// The lower limit can be from 50 us to 9950 us. 
+		// The upper limit will always be 100 us longer than the lower limit
 		
 		// Verify limits
 		// Loop until the user confirms these limits.
@@ -208,7 +208,7 @@ int main(void)
 				
 				uint16_t time = lLimit + i;
 				PRINT_UINT16(time);
-				PRINT("ms\t");
+				PRINT("us\t");
 				
 				PRINT_UINT16(buckets[i]);
 				PRINT("\n\r");
