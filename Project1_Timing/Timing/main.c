@@ -289,48 +289,44 @@ uint8_t PerformPOST(void)
 	uint8_t bRepeatPostTest = 1;
 	while(bRepeatPostTest)
 	{
-		uint16_t prevTime = 0;
-		uint16_t cnt = 0;
-		
-		// Start the POST test
+		uint32_t totalElapsedTime = 0;
 		uint8_t bRunningPostTest = 1;
+    
+    uint16_t prevTime = 0;
+    
+		// Start the POST test
 		while (bRunningPostTest == 1)
 		{
 			if (IsCaptureEventFlagSet())
 			{
-				cnt += 1;
-				
-				uint16_t time = GetCaptureEventTimer();
-				uint16_t elapsedTime = time - prevTime;
-				prevTime = time;
-				
-				if (elapsedTime < POST_TIME_MS)
-				{
-					// We did it! The POST was successful.
-					bPostTestSuccessful = 1;
-					bRunningPostTest = 0;
-					
-					PRINT("POST test ran successfully.\n\r");
-					
-					return (bPostTestSuccessful);
-				} 
-				else
-				{
-					// If this was a failed case and we exceeded a certain number of attempts, 
-					//		call this a failure.
-					if (cnt > POST_TIMEOUT_MAXCOUNT)
-					{
-						bPostTestSuccessful = 0;
-						bRunningPostTest = 0;
-					}
-				}
+				bPostTestSuccessful = 1;
+        PRINT("POST ran successfully!\n\r");
+        return (bPostTestSuccessful);
 			}
+      else
+      {
+        // Calc time
+        uint16_t elapsedTime = 0;
+        uint16_t currTime = TIM2->CNT;
+        if (prevTime != 0)
+          elapsedTime = currTime - prevTime;
+        prevTime = currTime;
+        totalElapsedTime += elapsedTime;
+        
+        // If this was a failed case and we exceeded the total time,
+        //		call this a failure.
+        if (totalElapsedTime > POST_TIME_US)
+        {
+          bPostTestSuccessful = 0;
+          bRunningPostTest = 0;
+        }
+      }
 		}
 		
 		// If the POST failed, prompt the user to try again.
 		if (bPostTestSuccessful == 0)
 		{
-			uint8_t confirmChar = PromptYesOrNo( (uint8_t *) "Failed to verify POST test. Would you like to try again? (y/n):\t");
+			uint8_t confirmChar = PromptYesOrNo( (uint8_t *) "Failed to verify POST. Would you like to try again? (y/n):\t");
 			
 			if (confirmChar == 'n' || confirmChar == 'N')
 				bRepeatPostTest = 0;

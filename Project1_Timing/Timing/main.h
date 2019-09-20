@@ -17,15 +17,13 @@
 
 #define HEADERLINE	"==============================================================================\n\r"
 
-// A pulse must be seen under POST_TIME_US us
-#define POST_TIME_MS		(1000)
-	
-// Max time between edges before timing out
-#define POST_TIMEOUT_MAXWAIT	(10000)
+// A pulse must be seen under POST_TIME_MS ms
+#define POST_TIME_MS		(100)
 
-// How many counts to perform before timing out
-#define POST_TIMEOUT_MAXCOUNT	(5000)
-	
+// A pulse must be seen under POST_TIME_US us
+#define POST_TIME_US    (POST_TIME_MS * 1000)
+
+
 
 // The default value of the lower limit
 #define LOWER_LIMIT_DEFAULT		(950)
