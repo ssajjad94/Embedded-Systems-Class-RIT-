@@ -379,7 +379,7 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>Source Group 1</GroupName>
+          <GroupName>Source Files</GroupName>
           <Files>
             <File>
               <FileName>stm32l476xx.h</FileName>
@@ -422,29 +422,29 @@
               <FilePath>.\GPIO.c</FilePath>
             </File>
             <File>
-              <FileName>GPIO.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\GPIO.h</FilePath>
+              <FileName>recipe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\recipe.c</FilePath>
             </File>
-            <File>
-              <FileName>LED.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\LED.h</FilePath>
-            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Header Files</GroupName>
+          <Files>
             <File>
               <FileName>main.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\main.h</FilePath>
             </File>
             <File>
-              <FileName>SysClock.h</FileName>
+              <FileName>recipe.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\SysClock.h</FilePath>
+              <FilePath>.\recipe.h</FilePath>
             </File>
             <File>
-              <FileName>timer.h</FileName>
+              <FileName>pins.txt</FileName>
               <FileType>5</FileType>
-              <FilePath>.\timer.h</FilePath>
+              <FilePath>.\pins.txt</FilePath>
             </File>
             <File>
               <FileName>UART.h</FileName>
@@ -452,9 +452,24 @@
               <FilePath>.\UART.h</FilePath>
             </File>
             <File>
-              <FileName>pins.txt</FileName>
+              <FileName>timer.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\pins.txt</FilePath>
+              <FilePath>.\timer.h</FilePath>
+            </File>
+            <File>
+              <FileName>SysClock.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\SysClock.h</FilePath>
+            </File>
+            <File>
+              <FileName>LED.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\LED.h</FilePath>
+            </File>
+            <File>
+              <FileName>GPIO.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\GPIO.h</FilePath>
             </File>
           </Files>
         </Group>

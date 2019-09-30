@@ -20,6 +20,7 @@ void InitTimer()
   TIM2->CCER = 0x0;
   
   // Set up the CCMRx register for the desired capture channel
+	
 	TIM2->CCMR1 &= ~TIM_CCMR1_CC1S;
   TIM2->CCMR1 |= TIM_CCMR1_CC1S_0;
 	//TIM2->CCMR1 = 0x1;

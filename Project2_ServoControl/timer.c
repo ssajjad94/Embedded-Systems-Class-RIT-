@@ -11,7 +11,7 @@ void InitTimer()
   RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN;
   
   // Load prescaler value into the TIMx->PSC reg.
-  TIM2->PSC = 79; //79
+  TIM2->PSC = 79;
   
   // Update new prescaler value using an update event, TIMx->EGR reg.
   TIM2->EGR |= TIM_EGR_UG;
