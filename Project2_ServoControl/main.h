@@ -7,11 +7,10 @@
 #include <stdio.h>
 
 #include "SysClock.h"
-#include "LED.h"
 #include "UART.h"
-#include "timer.h"
-#include "GPIO.h"
+
 #include "recipe.h"
+#include "PWM.h"
 
 #define PRINT(x)					USART_Write(USART2, (uint8_t*)x)
 #define PRINT_UINT16(x)		USART_WriteUInt16(USART2, x);

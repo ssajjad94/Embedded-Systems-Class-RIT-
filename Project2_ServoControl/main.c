@@ -10,8 +10,7 @@ int main(void)
 	
   System_Clock_Init(); // Switch System Clock = 80 MHz
 	UART2_Init();
-	InitGPIO();
-	InitTimer();
+	InitPWM();
 	
 	/*
 	

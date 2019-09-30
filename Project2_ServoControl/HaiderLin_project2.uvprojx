@@ -397,11 +397,6 @@
               <FilePath>.\main.c</FilePath>
             </File>
             <File>
-              <FileName>LED.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\LED.c</FilePath>
-            </File>
-            <File>
               <FileName>SysClock.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\SysClock.c</FilePath>
@@ -412,14 +407,9 @@
               <FilePath>.\UART.c</FilePath>
             </File>
             <File>
-              <FileName>timer.c</FileName>
+              <FileName>PWM.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\timer.c</FilePath>
-            </File>
-            <File>
-              <FileName>GPIO.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\GPIO.c</FilePath>
+              <FilePath>.\PWM.c</FilePath>
             </File>
             <File>
               <FileName>recipe.c</FileName>
@@ -452,24 +442,14 @@
               <FilePath>.\UART.h</FilePath>
             </File>
             <File>
-              <FileName>timer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\timer.h</FilePath>
-            </File>
-            <File>
               <FileName>SysClock.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\SysClock.h</FilePath>
             </File>
             <File>
-              <FileName>LED.h</FileName>
+              <FileName>PWM.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\LED.h</FilePath>
-            </File>
-            <File>
-              <FileName>GPIO.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\GPIO.h</FilePath>
+              <FilePath>.\PWM.h</FilePath>
             </File>
           </Files>
         </Group>
