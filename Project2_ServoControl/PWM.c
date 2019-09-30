@@ -1,5 +1,17 @@
 #include "PWM.h"
 
+void SetPWMPulseWidth1(uint16_t pulse_width)
+{
+	TIM2->CCR1 = pulse_width;
+}
+
+void SetPWMPulseWidth2(uint16_t pulse_width)
+{
+	TIM2->CCR2 = pulse_width;
+}
+	
+
+
 void InitPWM()
 {
 	// Init GPIO Port A, Pins 0 and 1 as PWM outputs
@@ -7,8 +19,6 @@ void InitPWM()
 	
 	// Init Timer 2 as output with PWM
 	InitTimerForPWM();
-	
-	// 
 }
 
 void InitTimerForPWM()
@@ -19,7 +29,7 @@ void InitTimerForPWM()
   RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN;
   
   // Load prescaler value into the TIMx->PSC reg.
-  TIM2->PSC = 7999;
+  TIM2->PSC = PWM_PRESCALER;
   
   // Update new prescaler value using an update event, TIMx->EGR reg.
   TIM2->EGR |= TIM_EGR_UG;
@@ -43,13 +53,20 @@ void InitTimerForPWM()
 	// Force an update into the timer
   TIM2->EGR |= TIM_EGR_UG;
 	
-	
-	
 	// PWM signal info
 	
-	// Set the auto-reload register
-	TIM2->ARR = 200;
+	// Set the auto-reload register (which controls the period)
+	TIM2->ARR = PWM_PERIOD;
 	
+	// Set the cpature/compare register 1 (which controls the pulse width)
+	SetPWMPulseWidth1(PWM_DEFAULT_WIDTH);
+	SetPWMPulseWidth2(PWM_DEFAULT_WIDTH);
+	
+	// Force an update into the timer
+  TIM2->EGR |= TIM_EGR_UG;
+	
+	// Enable the timer
+	TIM2->CR1 |= TIM_CR1_CEN;
 }
 
 
@@ -70,6 +87,6 @@ void InitGPIOForPWM()
 	//		PA1's AF1 is TIM2_CH2
 	
   GPIOA->AFR[0] |= 0x1;
-	GPIOA->AFR[1] |= 0x1;	// ? is this needed ?
+	GPIOA->AFR[0] |= (0x1 << 4);
 }
 

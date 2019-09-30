@@ -12,6 +12,13 @@ int main(void)
 	UART2_Init();
 	InitPWM();
 	
+	while (1)
+	{
+		uint16_t cnt = TIM2->CNT;
+		PRINT_UINT16(cnt);
+		PRINT("\n\r");
+	}
+	
 	/*
 	
 	*/
