@@ -11,6 +11,7 @@
 
 #include "recipe.h"
 #include "PWM.h"
+#include "LED.h"
 
 #define PRINT(x)					USART_Write(USART2, (uint8_t*)x)
 #define PRINT_UINT16(x)		USART_WriteUInt16(USART2, x);

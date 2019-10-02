@@ -10,6 +10,73 @@ void SetPWMPulseWidth2(uint16_t pulse_width)
 	TIM2->CCR2 = pulse_width;
 }
 	
+void SetPWMPulsePosition1(uint8_t position)
+{
+	// Helper function for translating position to pulse width.
+	
+	uint16_t width = 0;
+	
+	if (position == 0)
+	{
+		width = PWM_WIDTH_0;
+	}
+	else if (position == 1)
+	{
+		width = PWM_WIDTH_1;
+	} 
+	else if (position == 2)
+	{
+		width = PWM_WIDTH_2;
+	} 
+	else if (position == 3)
+	{
+		width = PWM_WIDTH_3;
+	} 
+	else if (position == 4)
+	{
+		width = PWM_WIDTH_4;
+	} 
+	else if (position == 5)
+	{
+		width = PWM_WIDTH_5;
+	} 
+	
+	SetPWMPulseWidth1(width);
+}
+
+void SetPWMPulsePosition2(uint8_t position)
+{
+	// Helper function for translating position to pulse width.
+	
+	uint16_t width = 0;
+	
+	if (position == 0)
+	{
+		width = PWM_WIDTH_0;
+	}
+	else if (position == 1)
+	{
+		width = PWM_WIDTH_1;
+	} 
+	else if (position == 2)
+	{
+		width = PWM_WIDTH_2;
+	} 
+	else if (position == 3)
+	{
+		width = PWM_WIDTH_3;
+	} 
+	else if (position == 4)
+	{
+		width = PWM_WIDTH_4;
+	} 
+	else if (position == 5)
+	{
+		width = PWM_WIDTH_5;
+	} 
+	
+	SetPWMPulseWidth2(width);
+}
 
 
 void InitPWM()
@@ -35,13 +102,20 @@ void InitTimerForPWM()
   TIM2->EGR |= TIM_EGR_UG;
   
   // Turn off / reset input capture 
-  TIM2->CCER = 0x0;
   
   // Set up the CCMRx register for the desired capture channel (pg 906)
 	TIM2->CCMR1 &= ~TIM_CCMR1_CC1S;	// 00 -> CC1 channel is configured as output
 	TIM2->CCMR1 |= TIM_CCMR1_OC1PE; // Output compare 2 preload enable
+	TIM2->CCMR1 &= ~TIM_CCMR1_OC1M;
+	TIM2->CCMR1 |= TIM_CCMR1_OC1M_1;
+	TIM2->CCMR1 |= TIM_CCMR1_OC1M_2;
+	
+	
 	TIM2->CCMR1 &= ~TIM_CCMR1_CC2S;	// 00 -> CC2 channel is configured as output
 	TIM2->CCMR1 |= TIM_CCMR1_OC2PE; // Output compare 2 preload enable
+	TIM2->CCMR1 &= ~TIM_CCMR1_OC2M;
+	TIM2->CCMR1 |= TIM_CCMR1_OC2M_1;
+	TIM2->CCMR1 |= TIM_CCMR1_OC2M_2;
 	
 	// Enable the auto-Reload of the preload in the timer's control register
 	TIM2->CR1 |= TIM_CR1_ARPE;
@@ -81,6 +155,9 @@ void InitGPIOForPWM()
   // Set MODER to use Alt function
   GPIOA->MODER &= ~GPIO_MODER_MODER0;
 	GPIOA->MODER  |= GPIO_MODER_MODER0_1;
+	
+	GPIOA->MODER &= ~GPIO_MODER_MODER1;
+	GPIOA->MODER  |= GPIO_MODER_MODER1_1;
   
   // Set AFR (Alternate Function) to use AF1 
 	//		PA0's AF1 is TIM2_CH1

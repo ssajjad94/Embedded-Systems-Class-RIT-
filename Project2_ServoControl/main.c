@@ -11,18 +11,55 @@ int main(void)
   System_Clock_Init(); // Switch System Clock = 80 MHz
 	UART2_Init();
 	InitPWM();
+	LED_Init();
 	
+#ifdef DEBUG_MODE
 	while (1)
 	{
-		uint16_t cnt = TIM2->CNT;
-		PRINT_UINT16(cnt);
+		char rxByte = 0;
+		uint8_t limit = 0;
+		
+		// Try to read an input
+		PRINT("Please enter a new position.\t");
+		while (rxByte != '\n' && rxByte != '\r')
+		{
+			// If we have a digit value, increase the significance of the previous inputs by a digit
+				// and append the current input's value.
+			if (rxByte >= '0' && rxByte <= '5')
+				limit = (rxByte - '0');
+			
+			rxByte = USART_Read(USART2);
+		} 
 		PRINT("\n\r");
+		
+		SetPWMPulsePosition1(limit);
 	}
 	
+#endif
+
 	/*
-	
+		Main Program Loop
 	*/
+	
+	struct RecipeThread servoOneRecipe;
+	servoOneRecipe.servo = 1;
+	
+	struct RecipeThread servoTwoRecipe;
+	servoOneRecipe.servo = 2;
+	
+	uint8_t bRunning = 1;
+	while (bRunning)
+	{
+		// 
+		
+		
+		// Wait 100 ms. 
+		
+	}
 }
+
+
+
 
 
 /*
