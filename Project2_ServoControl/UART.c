@@ -111,6 +111,32 @@ uint8_t USART_Read (USART_TypeDef * USARTx) {
 	return (rxChar[0]);
 }
 
+
+/*
+	Returns a character inputted to the terminal,
+		or null-termination 0x00 if none.
+*/
+uint8_t USART_ReadAsync (USART_TypeDef * USARTx) 
+{
+	uint8_t rxChar[2];
+	rxChar[0] = 0x00;
+	rxChar[1] = 0x00;
+	
+	// SR_RXNE (Read data register not empty) bit is set by hardware
+	if (USARTx->ISR & USART_ISR_RXNE)
+	{
+		// Wait until RXNE (RX not empty) bit is set
+		// USART resets the RXNE flag automatically after reading DR
+		// Reading USART_DR automatically clears the RXNE flag 
+		
+		rxChar[0] = (uint8_t)(USARTx->RDR & 0xFF);
+		rxChar[1] = 0x00;
+	}
+	
+	USART_Write(USARTx, rxChar);
+	return (rxChar[0]);
+}
+
 void USART_Write(USART_TypeDef * USARTx, uint8_t *buffer) 
 {
 	int i;

@@ -13,69 +13,77 @@ void SetPWMPulseWidth2(uint16_t pulse_width)
 void SetPWMPulsePosition1(uint8_t position)
 {
 	// Helper function for translating position to pulse width.
-	
-	uint16_t width = 0;
-	
-	if (position == 0)
+
+	if (position <= 5)
 	{
-		width = PWM_WIDTH_0;
+		uint16_t width = 0;
+		PWMOneLastPosition = position;
+		
+		if (position == 0)
+		{
+			width = PWM_WIDTH_0;
+		}
+		else if (position == 1)
+		{
+			width = PWM_WIDTH_1;
+		} 
+		else if (position == 2)
+		{
+			width = PWM_WIDTH_2;
+		} 
+		else if (position == 3)
+		{
+			width = PWM_WIDTH_3;
+		} 
+		else if (position == 4)
+		{
+			width = PWM_WIDTH_4;
+		} 
+		else if (position == 5)
+		{
+			width = PWM_WIDTH_5;
+		} 
+		
+		SetPWMPulseWidth1(width);
 	}
-	else if (position == 1)
-	{
-		width = PWM_WIDTH_1;
-	} 
-	else if (position == 2)
-	{
-		width = PWM_WIDTH_2;
-	} 
-	else if (position == 3)
-	{
-		width = PWM_WIDTH_3;
-	} 
-	else if (position == 4)
-	{
-		width = PWM_WIDTH_4;
-	} 
-	else if (position == 5)
-	{
-		width = PWM_WIDTH_5;
-	} 
-	
-	SetPWMPulseWidth1(width);
 }
 
 void SetPWMPulsePosition2(uint8_t position)
 {
 	// Helper function for translating position to pulse width.
 	
-	uint16_t width = 0;
-	
-	if (position == 0)
+	if (position <= 5)
 	{
-		width = PWM_WIDTH_0;
+		uint16_t width = 0;
+		PWMTwoLastPosition = position;
+		
+		if (position == 0)
+		{
+			width = PWM_WIDTH_0;
+		}
+		else if (position == 1)
+		{
+			width = PWM_WIDTH_1;
+		} 
+		else if (position == 2)
+		{
+			width = PWM_WIDTH_2;
+		} 
+		else if (position == 3)
+		{
+			width = PWM_WIDTH_3;
+		} 
+		else if (position == 4)
+		{
+			width = PWM_WIDTH_4;
+		} 
+		else if (position == 5)
+		{
+			width = PWM_WIDTH_5;
+		} 
+		
+		SetPWMPulseWidth2(width);
 	}
-	else if (position == 1)
-	{
-		width = PWM_WIDTH_1;
-	} 
-	else if (position == 2)
-	{
-		width = PWM_WIDTH_2;
-	} 
-	else if (position == 3)
-	{
-		width = PWM_WIDTH_3;
-	} 
-	else if (position == 4)
-	{
-		width = PWM_WIDTH_4;
-	} 
-	else if (position == 5)
-	{
-		width = PWM_WIDTH_5;
-	} 
-	
-	SetPWMPulseWidth2(width);
 }
 
 

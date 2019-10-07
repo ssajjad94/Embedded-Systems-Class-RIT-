@@ -11,6 +11,7 @@ int main(void)
   System_Clock_Init(); // Switch System Clock = 80 MHz
 	UART2_Init();
 	InitPWM();
+	InitTimer3();
 	LED_Init();
 	
 #ifdef DEBUG_MODE
@@ -45,16 +46,67 @@ int main(void)
 	servoOneRecipe.servo = 1;
 	
 	struct RecipeThread servoTwoRecipe;
-	servoOneRecipe.servo = 2;
+	servoTwoRecipe.servo = 2;
 	
+	// Load recipies
+	LoadNewRecipe(&servoOneRecipe, recipie_test, sizeof(recipie_test) / sizeof(char));
+	LoadNewRecipe(&servoTwoRecipe, recipie_test, sizeof(recipie_test) / sizeof(char));
+	
+	// Set them to paused initially
+	TogglePauseRecipe(&servoOneRecipe, 1);
+	TogglePauseRecipe(&servoTwoRecipe, 1);
+	
+	// Main execution loop
 	uint8_t bRunning = 1;
 	while (bRunning)
 	{
-		// 
+		// Run recipe(s)
+			// RunRecipe() will check if execution is paused or done.
+		RunRecipe(&servoOneRecipe);
+		RunRecipe(&servoTwoRecipe);
+		
+		// Check for errors in Servo One
+		if (servoOneRecipe.m_NestedLoopError)
+		{
+			Green_LED_On();
+			Red_LED_On();
+		}
+		else if (servoOneRecipe.m_CommandError)
+		{
+			Green_LED_Off();
+			Red_LED_On();
+		}
+		else if (servoOneRecipe.m_bPaused)
+		{
+			Green_LED_Off();
+			Red_LED_Off();
+		}
+		else if (servoOneRecipe.m_bRunningRecipe )
+		{
+			// If not paused or in any error state and is running:
+			Green_LED_On();
+			Red_LED_Off();
+		}
 		
 		
-		// Wait 100 ms. 
 		
+		// Check for User Commands
+		if (CheckForInputs())
+		{
+			char servoOneCommand = GetServoOneChar();
+			char servoTwoCommand = GetServoTwoChar();
+			ClearInputBuffer();
+			
+			// Perform commands
+			PerformCommand(&servoOneRecipe, servoOneCommand);
+			PerformCommand(&servoTwoRecipe, servoTwoCommand);
+			
+			PRINT("\n\r");
+		}
+		
+		// Wait 100 ms.
+			// (in 1 us)
+		WaitTIM3(1000);
 	}
 }
 

@@ -421,6 +421,16 @@
               <FileType>1</FileType>
               <FilePath>.\LED.c</FilePath>
             </File>
+            <File>
+              <FileName>UserCommand.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UserCommand.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\timer.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -435,6 +445,11 @@
               <FileName>recipe.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\recipe.h</FilePath>
+            </File>
+            <File>
+              <FileName>UserCommand.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\UserCommand.h</FilePath>
             </File>
             <File>
               <FileName>pins.txt</FileName>
@@ -460,6 +475,11 @@
               <FileName>LED.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\LED.h</FilePath>
+            </File>
+            <File>
+              <FileName>timer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\timer.h</FilePath>
             </File>
           </Files>
         </Group>

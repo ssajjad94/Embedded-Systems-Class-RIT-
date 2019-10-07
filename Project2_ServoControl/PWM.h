@@ -7,7 +7,7 @@ void InitPWM(void);
 
 #define PWM_PRESCALER						7999
 #define PWM_PERIOD							200
-#define PWM_DEFAULT_WIDTH				100	
+#define PWM_DEFAULT_WIDTH				4	
 
 #define PWM_WIDTH_0							4
 #define PWM_WIDTH_1							7
@@ -21,6 +21,9 @@ void SetPWMPulseWidth2(uint16_t pulse_width);
 
 void SetPWMPulsePosition1(uint8_t position);
 void SetPWMPulsePosition2(uint8_t position);
+
+static uint8_t PWMOneLastPosition = 0;
+static uint8_t PWMTwoLastPosition = 0;
 
 void InitTimerForPWM(void);
 void InitGPIOForPWM(void);

@@ -1,12 +1,20 @@
 #include "recipe.h"
 
-void LoadNewRecipe(struct RecipeThread* thread, char recipie[])
+/*
+LoadnewRecipe will load a given recipe from a char pointer into 
+	a RecipeThread ("thread") struct.
+ */
+void LoadNewRecipe(struct RecipeThread* thread, char recipie[], uint16_t size)
 {
 	thread->m_bRunningRecipe = 1;
 	thread->m_bPaused = 0;
 	
 	thread->m_Index = 0;
-	thread->m_Recipie = recipie;
+	for (int i = 0; i < size; i++)
+	{
+		// Copy recipe
+		thread->m_Recipie[i] = recipie[i];
+	}
 	
 	thread->m_WaitIterations = 0;
 	thread->m_WaitIterationsElapsed = 0;
@@ -17,7 +25,29 @@ void LoadNewRecipe(struct RecipeThread* thread, char recipie[])
 	
 	thread->m_CommandError = 0;
 	thread->m_NestedLoopError = 0;
+	
+	thread->m_InSweep = 0;
 }
+
+void RestartRecipe(struct RecipeThread* thread)
+{
+		thread->m_bRunningRecipe = 1;
+	thread->m_bPaused = 0;
+	
+	thread->m_Index = 0;
+	
+	thread->m_WaitIterations = 0;
+	thread->m_WaitIterationsElapsed = 0;
+	
+	thread->m_LoopIndex = (-1);
+	thread->m_LoopCount = 0;
+	thread->m_LoopCountMax = 0;
+	
+	thread->m_CommandError = 0;
+	thread->m_NestedLoopError = 0;
+	
+	thread->m_InSweep = 0;
+}	
 
 
 void TogglePauseRecipe(struct RecipeThread* thread, uint8_t pause)
@@ -38,6 +68,39 @@ void RunRecipe(struct RecipeThread* thread)
 		{
 			thread->m_WaitIterationsElapsed += 1;
 		}
+		// Check if we're sweeping.
+		else if (thread->m_InSweep)
+		{
+			if (thread->m_InSweep == 1)
+			{
+				if (thread->servo == 1)
+				{
+					SetPWMPulsePosition1(5);
+				}
+				else if (thread->servo == 2)
+				{
+					SetPWMPulsePosition2(5);
+				}
+				
+				thread->m_InSweep += 1;
+			}
+			else if (thread->m_InSweep == 2)
+			{
+				if (thread->servo == 1)
+				{
+					SetPWMPulsePosition1(0);
+				}
+				else if (thread->servo == 2)
+				{
+					SetPWMPulsePosition2(0);
+				}
+				
+				thread->m_InSweep = 0;
+			}
+			
+			thread->m_WaitIterations = WAIT_ITER_AFTER_MOV;
+			thread->m_WaitIterationsElapsed = 0;
+		}
 		else
 		{
 			// Parse the command.
@@ -46,18 +109,30 @@ void RunRecipe(struct RecipeThread* thread)
 				// first three bits is the Opcode
 				// last five bits is the parameter
 			
-			uint8_t opcode = (command & OPCODE_MASK) > OPCODE_SHIFT;
+			uint8_t opcode = (command & OPCODE_MASK) >> OPCODE_SHIFT;
 			uint8_t param = (command & PARAM_MASK);
 			
 			if (opcode == OP_MOV)
 			{
-				if (thread->servo == 1)
+				if (param > 5) // If param is invalid
 				{
-					SetPWMPulsePosition1(param);
+					// Set an error and stop execution.
+					thread->m_CommandError = 1;
+					thread->m_bRunningRecipe = 0;
 				}
-				else if (thread->servo == 2)
+				else
 				{
-					SetPWMPulsePosition2(param);
+					if (thread->servo == 1)
+					{
+						SetPWMPulsePosition1(param);
+					}
+					else if (thread->servo == 2)
+					{
+						SetPWMPulsePosition2(param);
+					}
+					
+					thread->m_WaitIterations = WAIT_ITER_AFTER_MOV;
+					thread->m_WaitIterationsElapsed = 0;
 				}
 			}
 			else if (opcode == OP_WAIT)
@@ -99,6 +174,21 @@ void RunRecipe(struct RecipeThread* thread)
 					thread->m_LoopCountMax = 0;
 				}
 			}
+			else if (opcode == OP_SWEEP)
+			{
+				thread->m_InSweep = 1;
+				if (thread->servo == 1)
+				{
+					SetPWMPulsePosition1(0);
+				}
+				else if (thread->servo == 2)
+				{
+					SetPWMPulsePosition2(0);
+				}
+				
+				thread->m_WaitIterations = WAIT_ITER_AFTER_MOV;
+				thread->m_WaitIterationsElapsed = 0;
+			}
 			else if (opcode == OP_RECIPEEND)
 			{
 				// End program execution.
@@ -108,7 +198,6 @@ void RunRecipe(struct RecipeThread* thread)
 			{
 				// Set an error and stop execution.
 				thread->m_CommandError = 1;
-				
 				thread->m_bRunningRecipe = 0;
 			}
 			
