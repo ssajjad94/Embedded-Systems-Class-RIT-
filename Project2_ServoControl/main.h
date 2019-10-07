@@ -23,7 +23,7 @@
 uint8_t PromptYesOrNo(uint8_t* prompt);
 
 
-char recipie_test[] = 
+char recipie_test_0[] = 
 {
 	(OP_MOV << OPCODE_SHIFT) | 3,
 	(OP_SWEEP << OPCODE_SHIFT),
@@ -46,6 +46,70 @@ char recipie_test[] =
 	(OP_WAIT << OPCODE_SHIFT) | 31,
 	(OP_MOV << OPCODE_SHIFT) | 4,
 	(OP_RECIPEEND << OPCODE_SHIFT) 
+};
+
+char recipie_test_1[] = 
+{
+	(OP_WAIT << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 1,
+	(OP_WAIT << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 2,
+	(OP_WAIT << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 3,
+	(OP_WAIT << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 4,
+	(OP_WAIT << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 5,
+	(OP_WAIT << OPCODE_SHIFT) | 31,	//3.2 sec
+	(OP_SWEEP << OPCODE_SHIFT),
+	(OP_WAIT << OPCODE_SHIFT) | 31,	//3.2 sec
+	(OP_MOV << OPCODE_SHIFT) | 5,
+	(OP_WAIT << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 4,
+	(OP_WAIT << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 3,
+	(OP_WAIT << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 2,
+	(OP_WAIT << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 1,
+	(OP_WAIT << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 0,
+	(OP_RECIPEEND << OPCODE_SHIFT) 
+};
+
+
+char recipie_test_2[] = 
+{
+	(OP_WAIT << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 1,
+	(OP_WAIT << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 2,
+	(OP_WAIT << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 3,
+	(OP_WAIT << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 4,
+	(OP_WAIT << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 5,
+	(OP_RECIPEEND << OPCODE_SHIFT), 
+	(OP_WAIT << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 2
+};
+
+char recipie_test_3[] = 
+{
+	(OP_WAIT << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 1,
+	(OP_WAIT << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 2,
+	(OP_LOOP << OPCODE_SHIFT) | 0,
+	(OP_LOOP << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 1,
+	(OP_MOV << OPCODE_SHIFT) | 3,
+	(OP_ENDLOOP << OPCODE_SHIFT),
+	(OP_MOV << OPCODE_SHIFT) | 4,
+	(OP_WAIT << OPCODE_SHIFT) | 0,
+	(OP_MOV << OPCODE_SHIFT) | 5,
+	(OP_RECIPEEND << OPCODE_SHIFT)
 };
 
 

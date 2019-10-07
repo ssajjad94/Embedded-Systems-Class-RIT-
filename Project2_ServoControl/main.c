@@ -49,8 +49,8 @@ int main(void)
 	servoTwoRecipe.servo = 2;
 	
 	// Load recipies
-	LoadNewRecipe(&servoOneRecipe, recipie_test, sizeof(recipie_test) / sizeof(char));
-	LoadNewRecipe(&servoTwoRecipe, recipie_test, sizeof(recipie_test) / sizeof(char));
+	LoadNewRecipe(&servoOneRecipe, recipie_test_3, sizeof(recipie_test_3) / sizeof(char));
+	LoadNewRecipe(&servoTwoRecipe, recipie_test_3, sizeof(recipie_test_3) / sizeof(char));
 	
 	// Set them to paused initially
 	TogglePauseRecipe(&servoOneRecipe, 1);
