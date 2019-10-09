@@ -15,6 +15,7 @@ void SetPWMPulseWidth2(uint16_t pulse_width)
 	TIM2->CCR2 = pulse_width;
 }
 	
+// Set the pulse position for a servo
 void SetPWMPulsePosition(uint8_t servo, uint8_t position)
 {
 	// Helper function for translating position to pulse width.
@@ -63,7 +64,7 @@ void SetPWMPulsePosition(uint8_t servo, uint8_t position)
 	}
 }
 
-
+// Moves a servo left
 void ShiftPWMLeft(uint8_t servo)
 {
 	uint8_t lastPosition = 0;
@@ -78,6 +79,7 @@ void ShiftPWMLeft(uint8_t servo)
 		SetPWMPulsePosition(servo, 0);
 }
 
+// Moves a servo right
 void ShiftPWMRight(uint8_t servo)
 {
 	uint8_t lastPosition = 0;
