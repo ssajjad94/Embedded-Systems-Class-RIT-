@@ -7,23 +7,23 @@ void InitPWM(void);
 
 #define PWM_PRESCALER						7999
 #define PWM_PERIOD							200
-#define PWM_DEFAULT_WIDTH				4	
+#define PWM_DEFAULT_POSITION		0
 
-#define PWM_WIDTH_0							4
-#define PWM_WIDTH_1							7
-#define PWM_WIDTH_2							10
-#define PWM_WIDTH_3							13
-#define PWM_WIDTH_4							16
-#define PWM_WIDTH_5							20
+#define PWM_OFFSET							3				
+	// Because some servo boxes are different, things may need to shift a bit
 
-void SetPWMPulseWidth1(uint16_t pulse_width);
-void SetPWMPulseWidth2(uint16_t pulse_width);
+#define PWM_WIDTH_0							4	+ PWM_OFFSET
+#define PWM_WIDTH_1							7 + PWM_OFFSET
+#define PWM_WIDTH_2							10 + PWM_OFFSET
+#define PWM_WIDTH_3							13 + PWM_OFFSET
+#define PWM_WIDTH_4							16 + PWM_OFFSET
+#define PWM_WIDTH_5							20 + PWM_OFFSET	
 
-void SetPWMPulsePosition1(uint8_t position);
-void SetPWMPulsePosition2(uint8_t position);
+void SetPWMPulsePosition(uint8_t servo, uint8_t position);
 
-static uint8_t PWMOneLastPosition = 0;
-static uint8_t PWMTwoLastPosition = 0;
+void ShiftPWMLeft(uint8_t servo);
+
+void ShiftPWMRight(uint8_t servo);
 
 void InitTimerForPWM(void);
 void InitGPIOForPWM(void);

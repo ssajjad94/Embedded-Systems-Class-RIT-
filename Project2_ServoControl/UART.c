@@ -133,7 +133,10 @@ uint8_t USART_ReadAsync (USART_TypeDef * USARTx)
 		rxChar[1] = 0x00;
 	}
 	
-	USART_Write(USARTx, rxChar);
+	if (rxChar[0] != '\r')
+		USART_Write(USARTx, rxChar);
+	
+	
 	return (rxChar[0]);
 }
 

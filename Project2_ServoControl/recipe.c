@@ -73,27 +73,13 @@ void RunRecipe(struct RecipeThread* thread)
 		{
 			if (thread->m_InSweep == 1)
 			{
-				if (thread->servo == 1)
-				{
-					SetPWMPulsePosition1(5);
-				}
-				else if (thread->servo == 2)
-				{
-					SetPWMPulsePosition2(5);
-				}
+				SetPWMPulsePosition(thread->servo, 5);
 				
 				thread->m_InSweep += 1;
 			}
 			else if (thread->m_InSweep == 2)
 			{
-				if (thread->servo == 1)
-				{
-					SetPWMPulsePosition1(0);
-				}
-				else if (thread->servo == 2)
-				{
-					SetPWMPulsePosition2(0);
-				}
+				SetPWMPulsePosition(thread->servo, 0);
 				
 				thread->m_InSweep = 0;
 			}
@@ -122,14 +108,7 @@ void RunRecipe(struct RecipeThread* thread)
 				}
 				else
 				{
-					if (thread->servo == 1)
-					{
-						SetPWMPulsePosition1(param);
-					}
-					else if (thread->servo == 2)
-					{
-						SetPWMPulsePosition2(param);
-					}
+					SetPWMPulsePosition(thread->servo, param);
 					
 					thread->m_WaitIterations = WAIT_ITER_AFTER_MOV;
 					thread->m_WaitIterationsElapsed = 0;
@@ -177,14 +156,7 @@ void RunRecipe(struct RecipeThread* thread)
 			else if (opcode == OP_SWEEP)
 			{
 				thread->m_InSweep = 1;
-				if (thread->servo == 1)
-				{
-					SetPWMPulsePosition1(0);
-				}
-				else if (thread->servo == 2)
-				{
-					SetPWMPulsePosition2(0);
-				}
+				SetPWMPulsePosition(thread->servo, 0);
 				
 				thread->m_WaitIterations = WAIT_ITER_AFTER_MOV;
 				thread->m_WaitIterationsElapsed = 0;
@@ -193,6 +165,11 @@ void RunRecipe(struct RecipeThread* thread)
 			{
 				// End program execution.
 				thread->m_bRunningRecipe = 0;
+			}
+			else if (opcode == OP_PAUSE)
+			{
+				// Pause program execution
+				thread->m_bPaused = 1;
 			}
 			else
 			{

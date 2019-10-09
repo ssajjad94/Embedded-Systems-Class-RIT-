@@ -86,31 +86,19 @@ void PerformCommand(struct RecipeThread* thread, char command)
 		
 		case 'R':
 		case 'r':
-			if (!paused)
+			// If paused, move servo right.
+			if (paused)
 			{
-				if (thread->servo == 1)
-				{
-					SetPWMPulsePosition1(PWMOneLastPosition + 1);
-				}
-				else if (thread->servo == 2)
-				{
-					SetPWMPulsePosition2(PWMTwoLastPosition + 1);
-				}
+				ShiftPWMRight(thread->servo);
 			}
 			break;
 		
 		case 'L':
 		case 'l':
-			if (!paused)
+			// If paused, move servo left.
+			if (paused)
 			{
-				if (thread->servo == 1)
-				{
-					SetPWMPulsePosition1(PWMOneLastPosition - 1);
-				}
-				else if (thread->servo == 2)
-				{
-					SetPWMPulsePosition2(PWMTwoLastPosition - 1);
-				}
+				ShiftPWMLeft(thread->servo);
 			}
 			break;
 		

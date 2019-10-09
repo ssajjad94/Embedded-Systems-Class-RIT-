@@ -1,24 +1,35 @@
 #include "PWM.h"
 
+uint8_t PWMOneLastPosition = 0;
+uint8_t PWMTwoLastPosition = 0;
+
+// Helper function for setting a pulse in TIM2->CCR1
 void SetPWMPulseWidth1(uint16_t pulse_width)
 {
 	TIM2->CCR1 = pulse_width;
 }
 
+// Helper function for setting a pulse in TIM2->CCR2
 void SetPWMPulseWidth2(uint16_t pulse_width)
 {
 	TIM2->CCR2 = pulse_width;
 }
 	
-void SetPWMPulsePosition1(uint8_t position)
+void SetPWMPulsePosition(uint8_t servo, uint8_t position)
 {
 	// Helper function for translating position to pulse width.
 
 	if (position <= 5)
 	{
 		uint16_t width = 0;
-		PWMOneLastPosition = position;
 		
+		// Set Last Position
+		if (servo == 1)
+			PWMOneLastPosition = position;
+		else if (servo == 2)
+			PWMTwoLastPosition = position;
+		
+		// Translate position to a width
 		if (position == 0)
 		{
 			width = PWM_WIDTH_0;
@@ -44,48 +55,42 @@ void SetPWMPulsePosition1(uint8_t position)
 			width = PWM_WIDTH_5;
 		} 
 		
-		SetPWMPulseWidth1(width);
+		// Set the proper motor
+		if (servo == 1)
+			SetPWMPulseWidth1(width);
+		else if (servo == 2)
+			SetPWMPulseWidth2(width);
 	}
 }
 
-void SetPWMPulsePosition2(uint8_t position)
+
+void ShiftPWMLeft(uint8_t servo)
 {
-	// Helper function for translating position to pulse width.
+	uint8_t lastPosition = 0;
+	if (servo == 1)
+		lastPosition = PWMOneLastPosition;
+	else if (servo == 2)
+		lastPosition = PWMTwoLastPosition;
 	
-	if (position <= 5)
-	{
-		uint16_t width = 0;
-		PWMTwoLastPosition = position;
-		
-		if (position == 0)
-		{
-			width = PWM_WIDTH_0;
-		}
-		else if (position == 1)
-		{
-			width = PWM_WIDTH_1;
-		} 
-		else if (position == 2)
-		{
-			width = PWM_WIDTH_2;
-		} 
-		else if (position == 3)
-		{
-			width = PWM_WIDTH_3;
-		} 
-		else if (position == 4)
-		{
-			width = PWM_WIDTH_4;
-		} 
-		else if (position == 5)
-		{
-			width = PWM_WIDTH_5;
-		} 
-		
-		SetPWMPulseWidth2(width);
-	}
+	if (lastPosition > 0)
+		SetPWMPulsePosition(servo, lastPosition - 1);
+	else
+		SetPWMPulsePosition(servo, 0);
 }
 
+void ShiftPWMRight(uint8_t servo)
+{
+	uint8_t lastPosition = 0;
+	if (servo == 1)
+		lastPosition = PWMOneLastPosition;
+	else if (servo == 2)
+		lastPosition = PWMTwoLastPosition;
+	
+	if (lastPosition < 5)
+		SetPWMPulsePosition(servo, lastPosition + 1);
+	else
+		SetPWMPulsePosition(servo, 5);
+}
 
 void InitPWM()
 {
@@ -94,6 +99,10 @@ void InitPWM()
 	
 	// Init Timer 2 as output with PWM
 	InitTimerForPWM();
+	
+	// Initial positions
+	SetPWMPulsePosition(1, PWM_DEFAULT_POSITION);
+	SetPWMPulsePosition(2, PWM_DEFAULT_POSITION);
 }
 
 void InitTimerForPWM()
@@ -141,8 +150,8 @@ void InitTimerForPWM()
 	TIM2->ARR = PWM_PERIOD;
 	
 	// Set the cpature/compare register 1 (which controls the pulse width)
-	SetPWMPulseWidth1(PWM_DEFAULT_WIDTH);
-	SetPWMPulseWidth2(PWM_DEFAULT_WIDTH);
+	SetPWMPulsePosition(1, PWM_DEFAULT_POSITION);
+	SetPWMPulsePosition(2, PWM_DEFAULT_POSITION);
 	
 	// Force an update into the timer
   TIM2->EGR |= TIM_EGR_UG;

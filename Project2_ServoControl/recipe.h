@@ -12,6 +12,7 @@
 
 #define OP_MOV 				(0x01)
 #define OP_WAIT 			(0x02)
+#define OP_PAUSE			(0x03)
 #define OP_LOOP 			(0x04)
 #define OP_ENDLOOP 		(0x05)
 #define OP_SWEEP			(0x07)
@@ -19,7 +20,7 @@
 
 #define MAX_RECIPE_LEN	(100)
 
-#define WAIT_ITER_AFTER_MOV (4)
+#define WAIT_ITER_AFTER_MOV (5)
 
 struct RecipeThread 
 {

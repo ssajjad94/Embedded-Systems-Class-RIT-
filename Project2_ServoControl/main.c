@@ -42,6 +42,8 @@ int main(void)
 		Main Program Loop
 	*/
 	
+	PRINT("Welcome to the Servo Project!\n\r");
+	
 	struct RecipeThread servoOneRecipe;
 	servoOneRecipe.servo = 1;
 	
@@ -49,8 +51,8 @@ int main(void)
 	servoTwoRecipe.servo = 2;
 	
 	// Load recipies
-	LoadNewRecipe(&servoOneRecipe, recipie_test_3, sizeof(recipie_test_3) / sizeof(char));
-	LoadNewRecipe(&servoTwoRecipe, recipie_test_3, sizeof(recipie_test_3) / sizeof(char));
+	LoadNewRecipe(&servoOneRecipe, recipie_test_4, sizeof(recipie_test_4) / sizeof(char));
+	LoadNewRecipe(&servoTwoRecipe, recipie_test_0, sizeof(recipie_test_0) / sizeof(char));
 	
 	// Set them to paused initially
 	TogglePauseRecipe(&servoOneRecipe, 1);
@@ -58,6 +60,7 @@ int main(void)
 	
 	// Main execution loop
 	uint8_t bRunning = 1;
+	PRINT(ENTER_COMMAND);
 	while (bRunning)
 	{
 		// Run recipe(s)
@@ -101,7 +104,8 @@ int main(void)
 			PerformCommand(&servoOneRecipe, servoOneCommand);
 			PerformCommand(&servoTwoRecipe, servoTwoCommand);
 			
-			PRINT("\n\r");
+			PRINT("<CR>\n\r");
+			PRINT(ENTER_COMMAND);
 		}
 		
 		// Wait 100 ms.
