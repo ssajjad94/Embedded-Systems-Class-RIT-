@@ -1,0 +1,10 @@
+
+FREERTOS heapsize = 8kB = 8192 B. 
+
+IDE - MDK-ARM V5. 
+Copy only the necessary lirbary files.
+
+Task should never return.
+
+Masterign the FreeRTOS. 
+Ch 3, 4 7.

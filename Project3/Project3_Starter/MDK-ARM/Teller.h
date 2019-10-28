@@ -1,0 +1,26 @@
+#ifndef __TELLER_H    // header files should include guards
+#define __TELLER_H
+
+#include "stm32l4xx_hal.h"
+#include "Customer.h"
+#include "Break.h"
+
+#define NUMBER_OF_TELLERS		(3)
+
+enum Status 
+{
+	Idle = 0,
+	Busy = 1,
+	OnBreak = 2
+};
+
+
+typedef struct 
+{
+	enum Status status;
+	Customer* serviced_customers;
+	Break* breaks;
+	uint16_t breakCnt;
+} Teller;
+
+#endif
