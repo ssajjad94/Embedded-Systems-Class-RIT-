@@ -3,6 +3,7 @@
 
 #include "cmsis_os.h"
 #include "string.h"
+#include "queue.h"
 
 #include "main.h"
 #include "Customer.h"

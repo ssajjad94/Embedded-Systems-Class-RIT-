@@ -83,8 +83,44 @@ void teller_service_task_init(char *teller_service_task_name, int id,
 */																
 void TakeCustomerFromQueue(int tellerID)
 {
+	// Get the teller and time
 	Teller* teller = (&teller_service_params[tellerID])->teller;
-	//@todo
+	uint32_t* simulation_clock_ptr = (&teller_service_params[tellerID])->SimulationClockPtr;
+	
+	// Get a customer from the queue pointer
+	QueueHandle_t* queue = (&teller_service_params[tellerID])->CustomerQueuePtr;
+	
+	Customer nextCustomer;
+	if (pdPASS == xQueueReceive(queue, &nextCustomer, 0))
+	{
+		// Data was successful
+		
+		// Set the customer's start time to now
+		nextCustomer.service_start_time = (*simulation_clock_ptr);
+		
+		// Calculate a random time from 30 to 60 minutes
+		uint32_t random_time;
+		uint32_t min_time = 30 * T_SECOND;
+		uint32_t max_time = 8 * T_MINUTE;
+		HAL_RNG_GenerateRandomNumber(&hrng, &random_time);
+		random_time = min_time + (random_time % (max_time - min_time));
+		
+		// Set the customer's end time to random_time later
+		nextCustomer.service_start_time = (*simulation_clock_ptr) + random_time;
+		
+		// Add that customer to this teller's list of customers
+		teller->serviced_customers[teller->serviced_customers_cnt] = nextCustomer;
+		teller->serviced_customers_cnt++;
+		
+		// The teller is now Busy
+		teller->status = Busy;
+	}
+	else
+	{
+		// Not successful -> the queue was empty.
+		// The teller should stay idle.
+		teller->status = Idle;
+	}
 }
 
 
@@ -96,19 +132,31 @@ void TakeCustomerFromQueue(int tellerID)
  */																
 uint8_t IsCurrentCustomerServiced(int tellerID)
 {
+	// Get the teller and time
 	Teller* teller = (&teller_service_params[tellerID])->teller;
-	//@todo
+	uint32_t* simulation_clock_ptr = (&teller_service_params[tellerID])->SimulationClockPtr;
+	
+	// Get the current customer
+	Customer currCustomer = teller->serviced_customers[teller->serviced_customers_cnt - 1];
+
+	// Check if the customer's end time has passed
+	if (currCustomer.service_end_time > *(simulation_clock_ptr))
+	{
+		return 1;
+	}
+	
+	return 0;
 }															
 
 
 /*
-		If the teller can go on break, go to OnBreak.
-		If not, go to Idle. 
+		Set the teller back to Idle.
 */
 void EndCurrentCustomer(int tellerID)
 {
 	Teller* teller = (&teller_service_params[tellerID])->teller;
-	//@todo
+	
+	teller->status = Idle;
 }
 			
 /*
@@ -118,30 +166,82 @@ void EndCurrentCustomer(int tellerID)
 */																
 uint8_t CanGoOnBreak(int tellerID)
 {
+	// Get the teller and time
 	Teller* teller = (&teller_service_params[tellerID])->teller;
-	//@todo
+	uint32_t* simulation_clock_ptr = (&teller_service_params[tellerID])->SimulationClockPtr;
+	
+	// If there is a break scheduled
+	if (teller->break_cnt > 0)
+	{
+		// Get the newest break
+		Break newestBreak = teller->breaks[teller->break_cnt - 1];
+		
+		// Check that this is a new break that hasn't previously finished
+		if (newestBreak.end_time == 0) 
+		{
+			// Check that this break's start time has elapsed.
+			if (newestBreak.start_time > *(simulation_clock_ptr))
+			{
+				return 1;
+			}
+		}
+	}
+	
+	return 0;
 }
 
 
 /*
 	Set the Teller's status to OnBreak.
+	Set the current break's start time to now
 	Set the current break's end time to random time 1-4 minutes later.
-	Add that break to the list of breaks.
 */
 void StartBreak(int tellerID)
 {
+	// Get the teller and time
 	Teller* teller = (&teller_service_params[tellerID])->teller;
-	//@todo
+	uint32_t* simulation_clock_ptr = (&teller_service_params[tellerID])->SimulationClockPtr;
+	
+	// Get the next break
+	Break currBreak = teller->breaks[teller->break_cnt - 1];
+	
+	// Set the break's start time to now 
+		// (in cases where the break start later than intended)
+	currBreak.start_time = *(simulation_clock_ptr);
+	
+	// Calculate a random time from 1 to 4 minutes
+	uint32_t random_time;
+	uint32_t min_time = 1 * T_MINUTE;
+	uint32_t max_time = 4 * T_MINUTE;
+	HAL_RNG_GenerateRandomNumber(&hrng, &random_time);
+	random_time = min_time + (random_time % (max_time - min_time));  // 1000-1256
+	
+	// Set the break's end time to random time 1-4 minutes later
+	currBreak.end_time = *(simulation_clock_ptr) + random_time;
 }
 
 
 /*
 	Checks if current break's end time has passed. If so, return 1.
 		If not, return 0.
+  After
 */
 uint8_t IsCurrentBreakOver(int tellerID)
 {
-	//@todo
+	// Get the teller and time
+	Teller* teller = (&teller_service_params[tellerID])->teller;
+	uint32_t* simulation_clock_ptr = (&teller_service_params[tellerID])->SimulationClockPtr;
+	
+	// Get the newest break (the break that we're on)
+	Break currBreak = teller->breaks[teller->break_cnt - 1];
+	
+	// Check if the break's end_time has elapsed (the break is over)
+	if (currBreak.end_time > *(simulation_clock_ptr))
+	{
+		return 1;
+	}
+	
+	return 0;
 }
 
 
@@ -149,9 +249,35 @@ uint8_t IsCurrentBreakOver(int tellerID)
 	Set the Teller's status back to Idle.
 	Creates (schedules) the next break, and 
 	  sets its start time to 30-60 minutes later.
+	Add that break to the list of breaks.
  */
 void EndBreak(int tellerID)
 {
-	//@todo
+	// Get the teller and time
+	Teller* teller = (&teller_service_params[tellerID])->teller;
+	uint32_t* simulation_clock_ptr = (&teller_service_params[tellerID])->SimulationClockPtr;
+	
+	// The teller's break is over -> set it back to idle
+	teller->status = Idle;
+	
+	// Create and schedule the next break
+	Break newBreak;
+	
+	// Calculate a random time from 30 to 60 minutes
+	uint32_t random_time;
+	uint32_t min_time = 30 * T_MINUTE;
+	uint32_t max_time = 60 * T_MINUTE;
+	HAL_RNG_GenerateRandomNumber(&hrng, &random_time);
+	random_time = min_time + (random_time % (max_time - min_time));
+	
+	// Set the break's start time to that random time later
+	newBreak.start_time = *(simulation_clock_ptr) + random_time;
+	newBreak.end_time = 0; // Default 
+	
+	// Add this break to the teller's list of breaks
+	teller->breaks[teller->break_cnt] = newBreak;
+	
+	// Increment how many breaks this teller has been on
+	teller->break_cnt++;
 }
 

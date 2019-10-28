@@ -18,9 +18,12 @@ enum Status
 typedef struct 
 {
 	enum Status status;
+	
 	Customer* serviced_customers;
+	uint16_t serviced_customers_cnt;
+	
 	Break* breaks;
-	uint16_t breakCnt;
+	uint16_t break_cnt;
 } Teller;
 
 #endif

@@ -41,7 +41,19 @@ void update_task_init(char *update_task_name, uint32_t* simulation_clock_ptr,
 */
 void UpdateTime()
 {
-	//@todo
+	// Calculate the real elapsed time
+	uint32_t tickCount = xTaskGetTickCount();
+	uint32_t timeInMilliseconds = (tickCount / (configTICK_RATE_HZ / 1000)) ;
+	
+	// Convert the real time to simulation time
+		// 100ms in real time = 1 second in simulation time
+		// 	so 1 second in real time = 10 seconds in simulation time
+	uint32_t simulationTimeInMilliseconds = timeInMilliseconds * 10;
+	uint32_t simulationTimeInSeconds = simulationTimeInMilliseconds / 1000;
+	
+	// Set the simulation clock to the elapsed time
+	UPDATE_PARAMS_t *p = &update_params;
+	*(p->SimulationClockPtr) = simulationTimeInSeconds;
 }
 
 /*
@@ -52,5 +64,35 @@ void UpdateTime()
 */
 void UpdateDisplay()
 {
-	//@todo
+	// Get the data to print
+	UPDATE_PARAMS_t *p = &update_params;
+	
+	// Print current time
+	uint32_t currentTime = *(p->SimulationClockPtr);
+	USART_Printf("Current time (in seconds): %d \n\r", currentTime);
+	
+	// Print number of customers waiting in the queue
+	uint16_t numberOfCustomers = uxQueueMessagesWaiting(p->CustomerQueuePtr);
+	USART_Printf("Number of customers on the queue: %d \n\r", numberOfCustomers);
+	
+	// Print status of each teller
+	for (int tellerID = 0; tellerID < 3; tellerID++)
+	{
+		Teller current_teller = p->TellerPtr[tellerID];
+		
+		USART_Printf("Teller #%d status: ", tellerID);
+		
+		if (current_teller.status == Idle)
+		{
+			USART_Printf("IDLE\n\r");
+		}
+		else if (current_teller.status == Busy)
+		{
+			USART_Printf("BUSY\n\r");
+		} 
+		else if (current_teller.status == OnBreak)
+		{
+			USART_Printf("ON_BREAK\n\r");
+		}
+	}
 }

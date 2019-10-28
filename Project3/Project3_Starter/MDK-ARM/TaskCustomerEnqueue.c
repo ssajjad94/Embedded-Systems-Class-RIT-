@@ -86,5 +86,8 @@ void AddCustomer()
 	new_customer.arrival_time = *(p->SimulationClockPtr);
 	
 	// Add this new customer to the customer queue
-	
+	if (pdPASS == xQueueSendToBack(p->CustomerQueuePtr, new_customer))
+	{
+		
+	}
 }

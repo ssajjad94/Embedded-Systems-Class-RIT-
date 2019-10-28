@@ -3,6 +3,7 @@
 
 #include "cmsis_os.h"
 #include "string.h"
+#include "rng.h"
 
 #include "Customer.h"
 #include "Teller.h"
