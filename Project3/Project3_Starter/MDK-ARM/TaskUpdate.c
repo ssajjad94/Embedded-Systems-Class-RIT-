@@ -7,13 +7,21 @@ UPDATE_PARAMS_t update_params;
 */
 void update_task(void *parameters)
 {
+	USART_Printf("\033[2J");
+	
 	while(1)
 	{
+		// USART_Printf("\033[2J");	// Clear screen
+		USART_Printf("\033[0;0H");	// 0,0
+		
 		// Update current time in main program
 		UpdateTime();
 		
 		// Update display with data
 		UpdateDisplay();
+		
+		// Update metrics
+		DisplayMetrics();
 	}
 }
 
@@ -45,12 +53,12 @@ void UpdateTime()
 {
 	// Calculate the real elapsed time
 	uint32_t tickCount = xTaskGetTickCount();
-	uint32_t timeInMilliseconds = (tickCount / (configTICK_RATE_HZ / 1000)) ;
+	uint32_t timeInMilliseconds = tickCount / ((configTICK_RATE_HZ / 1000)) ;
 	
 	// Convert the real time to simulation time
-		// 100ms in real time = 1 second in simulation time
-		// 	so 1 second in real time = 10 seconds in simulation time
-	uint32_t simulationTimeInMilliseconds = timeInMilliseconds * 10;
+		// 100ms in real time = 1 minute in simulation time
+		// 	so 1 second in real time = 600 seconds in simulation time
+	uint32_t simulationTimeInMilliseconds = timeInMilliseconds * 60;
 	uint32_t simulationTimeInSeconds = simulationTimeInMilliseconds / 1000;
 	
 	// Set the simulation clock to the elapsed time
@@ -74,7 +82,14 @@ void UpdateDisplay()
 	
 	// Print current time
 	uint32_t currentTime = *(p->SimulationClockPtr);
-	USART_Printf("Current time (in seconds): %d \n\r", currentTime);
+	
+	uint16_t currentTimeHours = 7 + (currentTime / T_HOUR);
+	if (currentTimeHours > 12)
+		currentTimeHours -= 12;
+	uint16_t currentTimeMins = (currentTime % T_HOUR) / T_MINUTE;
+	
+	USART_Printf("Current time (in seconds): %5d \t %2.d:%2.d\n\r", currentTime, 
+				currentTimeHours, currentTimeMins);
 	
 	// Print number of customers waiting in the queue
 	uint16_t numberOfCustomers = uxQueueMessagesWaiting(queue);
@@ -89,11 +104,11 @@ void UpdateDisplay()
 		
 		if (current_teller.status == Idle)
 		{
-			USART_Printf("IDLE\n\r");
+			USART_Printf("IDLE     \n\r");
 		}
 		else if (current_teller.status == Busy)
 		{
-			USART_Printf("BUSY\n\r");
+			USART_Printf("BUSY     \n\r");
 		} 
 		else if (current_teller.status == OnBreak)
 		{
@@ -103,6 +118,76 @@ void UpdateDisplay()
 		{
 			// Error case. Should not enter here.
 			USART_Printf("UNKNOWN_ERR\n\r");
+		}
+		
+		// Print the total customers serviced
+		uint16_t cust_cnt = current_teller.serviced_customers_cnt;
+		if (current_teller.status == Busy)
+		{
+			// Don't count the current customer
+			cust_cnt -= 1;
+		}
+		USART_Printf("\tServiced %d customers\n\r", cust_cnt);
+		
+		// Print the number of breaks taken
+		uint16_t break_cnt = current_teller.break_cnt;
+		uint16_t nextBreakTime = BANK_CLOSE_TIME - *(p->SimulationClockPtr); 
+		uint16_t timeLeftOnBreak = 0;
+		
+		// Status flags
+		uint8_t on_break = 0;
+		uint8_t waiting_for_customer = 0;
+		
+		// If we have breaks
+		if (current_teller.break_cnt > 0)
+		{
+			Break nextBreak = current_teller.breaks[ current_teller.break_cnt - 1];
+			if (nextBreak.end_time == 0)
+			{
+				// If we haven't started the last break yet
+				break_cnt -= 1;
+				
+				if (*(p->SimulationClockPtr) >= nextBreak.start_time)
+				{
+					nextBreakTime = 0;	// Waiting for customer while busy
+					waiting_for_customer = 1;
+				}
+				else
+				{
+					nextBreakTime = nextBreak.start_time - *(p->SimulationClockPtr);
+				}
+			}
+			else
+			{
+				nextBreakTime = 0;	// Already on break
+				timeLeftOnBreak = nextBreak.end_time - *(p->SimulationClockPtr);
+				on_break = 1;
+			}
+		}
+		
+		// Convert to minutes
+		timeLeftOnBreak = timeLeftOnBreak / T_MINUTE;
+		nextBreakTime = nextBreakTime / T_MINUTE;
+		
+		// Print depending on status
+		USART_Printf("\tTaken %d breaks. \n\r", current_teller.break_cnt - 1);
+		if (on_break)
+		{
+			USART_Printf("\tCurrently enjoying a break ");
+			USART_Printf("for %d more minutes.     \n\r", timeLeftOnBreak);
+		}
+		else
+		{
+			if (waiting_for_customer)
+			{
+				USART_Printf("\tLooking forward to a break ");
+				USART_Printf("after this customer.    \n\r");
+			}
+			else
+			{
+				USART_Printf("\tLooking forward to a break ");
+				USART_Printf("in %d minutes.           \n\r", nextBreakTime);
+			}
 		}
 	}
 }

@@ -60,7 +60,7 @@ uint8_t CanNextCustomerBeQueued()
 											&& ( *(p->SimulationClockPtr) <= BANK_CLOSE_TIME);
 	if (isBankOpen)
 	{
-		if (*(p->NextCustomerTimePtr) >= *(p->SimulationClockPtr))
+		if (*(p->SimulationClockPtr) >= *(p->NextCustomerTimePtr))
 		{
 			retVal = 1;
 		}
@@ -89,6 +89,8 @@ void AddCustomer()
 	
 	// Set it's start to now
 	new_customer.arrival_time = *(p->SimulationClockPtr);
+	new_customer.service_start_time = 0;
+	new_customer.service_end_time = 0;
 	
 	// Add this new customer to the customer queue
 	if (pdPASS == xQueueSend(queue, &new_customer, 0))
@@ -107,5 +109,23 @@ void AddCustomer()
 		
 		// Update the size of the list
 		*(p->CustomerPtrSize) =  *(p->CustomerPtrSize) + 1;
+		
+		// Update NextCustomer Time to 1 to 4 minutes later
+		
+		// Calculate a random time from 1 to 4 minutes
+		uint32_t random_time;
+		uint32_t min_time = 1 * T_MINUTE;
+		uint32_t max_time = 4 * T_MINUTE;
+		HAL_RNG_GenerateRandomNumber(&hrng, &random_time);
+		random_time = min_time + (random_time % (max_time - min_time));
+		if (random_time < 1)
+		{
+			random_time = 3;
+		}
+		
+		uint32_t nextTime = *(p->SimulationClockPtr) + random_time;
+		*(p->NextCustomerTimePtr) = nextTime;
+		
+		// USART_Printf("Added customer. Adding next in: %d \n\r", nextTime);
 	}
 }

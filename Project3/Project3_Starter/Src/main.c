@@ -79,6 +79,33 @@
 
 /* USER CODE BEGIN PV */
 
+	// Create the array of tellers (size three)
+	Teller tellers[3];
+
+	// Simulation Clock
+	uint32_t simulation_clock;
+
+	// Customer queue
+	QueueHandle_t customer_queue;
+
+	// Create three customer list arrays
+	Customer teller0_customer_list[TELLER_LIST_OF_CUSTOMERS_LENGTH];
+	Customer teller1_customer_list[TELLER_LIST_OF_CUSTOMERS_LENGTH];
+	Customer teller2_customer_list[TELLER_LIST_OF_CUSTOMERS_LENGTH];
+
+	// Create three break list arrays 
+	Break teller0_break_list[TELLER_LIST_OF_BREAKS_LENGTH];
+	Break teller1_break_list[TELLER_LIST_OF_BREAKS_LENGTH];
+	Break teller2_break_list[TELLER_LIST_OF_BREAKS_LENGTH];
+	
+	// Next customer time
+	uint32_t next_customer_time;
+	
+	// All customers
+	Customer all_customers[CUSTOMER_LIST_LENGTH];
+	uint32_t all_customers_cnt;
+	uint32_t max_customer_queue_cnt;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -101,17 +128,12 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
-  /* USER CODE END 1 */
-
-  /* MCU Configuration--------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
-
-  /* USER CODE BEGIN Init */
-
-	uint32_t simulation_clock = 0;
-	QueueHandle_t customer_queue;
+	// Simulation Clock
+	simulation_clock = 0;
+	
+	// All customers
+	all_customers_cnt = 0;
+	max_customer_queue_cnt = 0;
 	
 	// Initialize the queue
 	customer_queue = xQueueCreate(CUSTOMER_QUEUE_LENGTH, sizeof(Customer));
@@ -122,8 +144,7 @@ int main(void)
 		while(1){;;}
 	}
 	
-	// Initialize the three tellers
-	Teller tellers[3];
+	// For each teller, initialize IDLE and array counts to 0
 	for (int i = 0; i < 3; i++)
 	{
 		tellers[i].status = Idle;
@@ -131,23 +152,25 @@ int main(void)
 		tellers[i].break_cnt = 0;
 	}
 	
-	Customer teller0_customer_list[TELLER_LIST_OF_CUSTOMERS_LENGTH];
-	Customer teller1_customer_list[TELLER_LIST_OF_CUSTOMERS_LENGTH];
-	Customer teller2_customer_list[TELLER_LIST_OF_CUSTOMERS_LENGTH];
-	
-	Break teller0_break_list[TELLER_LIST_OF_BREAKS_LENGTH];
-	Break teller1_break_list[TELLER_LIST_OF_BREAKS_LENGTH];
-	Break teller2_break_list[TELLER_LIST_OF_BREAKS_LENGTH];
-	
+	// Assign a customer list array to each teller
 	tellers[0].serviced_customers = teller0_customer_list;
 	tellers[1].serviced_customers = teller1_customer_list;
 	tellers[2].serviced_customers = teller2_customer_list;
 	
+	// Assign a break list array to each teller
 	tellers[0].breaks = teller0_break_list;
 	tellers[1].breaks = teller1_break_list;
 	tellers[2].breaks = teller2_break_list;
 	
-	
+  /* USER CODE END 1 */
+
+  /* MCU Configuration--------------------------------------------------------*/
+
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
+
+  /* USER CODE BEGIN Init */
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -163,11 +186,49 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 	
-  // led_task_init(0, "LED_TASK_0", 100, 500);
-  // led_task_init(1, "LED_TASK_1", 1000, 1000);
+	// Customer enqueue time 
+	// 	Default to 1-4 minutes after the bank opens
+	next_customer_time = 0;
+	{
+		// Calculate a random time from 1 to 4 minutes
+		uint32_t random_time;
+		uint32_t min_time = MIN_BREAK_TIME;
+		uint32_t max_time = MAX_BREAK_TIME;
+		HAL_RNG_GenerateRandomNumber(&hrng, &random_time);
+		random_time = min_time + (random_time % (max_time - min_time));
+		
+		next_customer_time = random_time;
+	}
 	
+	// Plan initial breaks for each teller
+	for (int i = 0; i < 3; i++)
+	{
+		// Calculate a random time from 30 to 60 minutes
+		uint32_t random_time;
+		uint32_t min_time = MIN_NEXT_BREAK_TIME;
+		uint32_t max_time = MAX_NEXT_BREAK_TIME;
+		HAL_RNG_GenerateRandomNumber(&hrng, &random_time);
+		random_time = min_time + (random_time % (max_time - min_time));
+		
+		tellers[i].breaks[0].start_time = random_time;
+		tellers[i].breaks[0].end_time = 0;
+		tellers[i].break_cnt = 1;
+	}
+	
+	
+	
+	// Start the update task
 	update_task_init("UPDATE_TASK", &simulation_clock, &customer_queue, tellers);
-  
+
+	// Start the teller task
+	teller_service_task_init("TELLER TASK 0", 0, &simulation_clock, &(tellers[0]), &customer_queue);
+	teller_service_task_init("TELLER TASK 1", 1, &simulation_clock, &(tellers[1]), &customer_queue);
+	teller_service_task_init("TELLER TASK 2", 2, &simulation_clock, &(tellers[2]), &customer_queue);
+
+	// Customer enqueue task
+	customer_enqueue_task_init("CUSTOMER ENQUEUE TASK", &simulation_clock, all_customers,
+		&all_customers_cnt, &customer_queue, &max_customer_queue_cnt, &next_customer_time);
+
   // USART_Printf is printf() customized to this platform and uses a variable argugment list.
   // It is convenient but unnecessary.  You can use HAL functions (e.g. HAL_USART_Transmit())
   USART_Printf("System initialized, starting FreeRTOS\r\n");
@@ -255,6 +316,13 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+void DisplayMetrics()
+{
+	// Print metrics
+	
+	
+}
 
 /* USER CODE END 4 */
 

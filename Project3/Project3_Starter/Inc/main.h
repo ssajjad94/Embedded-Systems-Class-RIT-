@@ -92,6 +92,8 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 
+void DisplayMetrics(void);
+
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
@@ -109,6 +111,15 @@ void Error_Handler(void);
 
 #define TELLER_LIST_OF_CUSTOMERS_LENGTH	(421)
 #define TELLER_LIST_OF_BREAKS_LENGTH		(15)
+
+#define MIN_CUSTOMER_SERVICE_TIME	(30 * T_SECOND)
+#define MAX_CUSTOMER_SERVICE_TIME	(8 * T_MINUTE)
+
+#define MIN_BREAK_TIME				(1 * T_MINUTE)
+#define MAX_BREAK_TIME				(4 * T_MINUTE)
+
+#define MIN_NEXT_BREAK_TIME		(30 * T_MINUTE)
+#define MAX_NEXT_BREAK_TIME		(60 * T_MINUTE)
 
 
 /* USER CODE END Private defines */
