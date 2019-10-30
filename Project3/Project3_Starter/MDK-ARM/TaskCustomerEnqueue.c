@@ -1,5 +1,7 @@
 #include "TaskCustomerEnqueue.h"
 
+CUSTOMERENQUEUE_PARAMS_t customer_enqueue_params;
+
 /*
 	Task execution. 
 */
@@ -21,7 +23,7 @@ void customer_enqueue_task(void *parameters)
 void customer_enqueue_task_init(char *customer_enqueue_task_name,
 																uint32_t* simulation_clock_ptr,
 																Customer* customer_ptr,
-																uint16_t* customer_ptr_size,
+																uint32_t* customer_ptr_size,
 																QueueHandle_t* customer_queue_ptr,
 																uint32_t* maximum_customer_queue_cnt_ptr,
 																uint32_t* next_customer_time_ptr
@@ -79,6 +81,9 @@ void AddCustomer()
 {
 	CUSTOMERENQUEUE_PARAMS_t *p = &customer_enqueue_params;
 	
+	// Get the queue
+	QueueHandle_t queue = *(p->CustomerQueuePtr);
+	
 	// Create the new customer
 	Customer new_customer;
 	
@@ -86,8 +91,21 @@ void AddCustomer()
 	new_customer.arrival_time = *(p->SimulationClockPtr);
 	
 	// Add this new customer to the customer queue
-	if (pdPASS == xQueueSendToBack(p->CustomerQueuePtr, new_customer))
+	if (pdPASS == xQueueSend(queue, &new_customer, 0))
 	{
+		// Count how many customers are in the queue
+		uint32_t customerQueueCnt = uxQueueMessagesWaiting(queue);
 		
+		// If the queue count is larger than the largest queue count, update the largest queue count
+		if (customerQueueCnt > *(p->MaximumCustomerQueueCntPtr))
+		{
+			*(p->MaximumCustomerQueueCntPtr) = customerQueueCnt;
+		}
+		
+		// Add this new customer to the list of all customers
+		p->CustomerPtr[*(p->CustomerPtrSize)] = new_customer;
+		
+		// Update the size of the list
+		*(p->CustomerPtrSize) =  *(p->CustomerPtrSize) + 1;
 	}
 }

@@ -1,5 +1,5 @@
 project3_starter\teller.o: Teller.c
-project3_starter\teller.o: Teller.h
+project3_starter\teller.o: ../Inc/Teller.h
 project3_starter\teller.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h
 project3_starter\teller.o: ../Inc/stm32l4xx_hal_conf.h
 project3_starter\teller.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h
@@ -34,5 +34,5 @@ project3_starter\teller.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim
 project3_starter\teller.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h
 project3_starter\teller.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h
 project3_starter\teller.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h
-project3_starter\teller.o: Customer.h
-project3_starter\teller.o: Break.h
+project3_starter\teller.o: ../Inc/Customer.h
+project3_starter\teller.o: ../Inc/Break.h

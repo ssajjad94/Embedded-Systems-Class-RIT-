@@ -1,5 +1,5 @@
 project3_starter\taskupdate.o: TaskUpdate.c
-project3_starter\taskupdate.o: TaskUpdate.h
+project3_starter\taskupdate.o: ../Inc/TaskUpdate.h
 project3_starter\taskupdate.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 project3_starter\taskupdate.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 project3_starter\taskupdate.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
@@ -50,7 +50,14 @@ project3_starter\taskupdate.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal
 project3_starter\taskupdate.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h
 project3_starter\taskupdate.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h
 project3_starter\taskupdate.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h
+project3_starter\taskupdate.o: ../Inc/Customer.h
+project3_starter\taskupdate.o: ../Inc/Teller.h
+project3_starter\taskupdate.o: ../Inc/Break.h
+project3_starter\taskupdate.o: ../Inc/TaskUpdate.h
+project3_starter\taskupdate.o: ../Inc/TaskTeller.h
+project3_starter\taskupdate.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 project3_starter\taskupdate.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-project3_starter\taskupdate.o: Customer.h
-project3_starter\taskupdate.o: Teller.h
-project3_starter\taskupdate.o: Break.h
+project3_starter\taskupdate.o: ../Inc/rng.h
+project3_starter\taskupdate.o: ../Inc/main.h
+project3_starter\taskupdate.o: ../Inc/TaskCustomerEnqueue.h
+project3_starter\taskupdate.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h

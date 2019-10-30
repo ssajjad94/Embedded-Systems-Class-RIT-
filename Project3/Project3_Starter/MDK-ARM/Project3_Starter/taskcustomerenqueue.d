@@ -1,5 +1,5 @@
 project3_starter\taskcustomerenqueue.o: TaskCustomerEnqueue.c
-project3_starter\taskcustomerenqueue.o: TaskCustomerEnqueue.h
+project3_starter\taskcustomerenqueue.o: ../Inc/TaskCustomerEnqueue.h
 project3_starter\taskcustomerenqueue.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 project3_starter\taskcustomerenqueue.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 project3_starter\taskcustomerenqueue.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
@@ -17,7 +17,8 @@ project3_starter\taskcustomerenqueue.o: ../Middlewares/Third_Party/FreeRTOS/Sour
 project3_starter\taskcustomerenqueue.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 project3_starter\taskcustomerenqueue.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
 project3_starter\taskcustomerenqueue.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-project3_starter\taskcustomerenqueue.o: Customer.h
+project3_starter\taskcustomerenqueue.o: ../Inc/rng.h
+project3_starter\taskcustomerenqueue.o: ../Inc/main.h
 project3_starter\taskcustomerenqueue.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h
 project3_starter\taskcustomerenqueue.o: ../Inc/stm32l4xx_hal_conf.h
 project3_starter\taskcustomerenqueue.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h
@@ -50,3 +51,14 @@ project3_starter\taskcustomerenqueue.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm3
 project3_starter\taskcustomerenqueue.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h
 project3_starter\taskcustomerenqueue.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h
 project3_starter\taskcustomerenqueue.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h
+project3_starter\taskcustomerenqueue.o: ../Inc/Customer.h
+project3_starter\taskcustomerenqueue.o: ../Inc/Teller.h
+project3_starter\taskcustomerenqueue.o: ../Inc/Break.h
+project3_starter\taskcustomerenqueue.o: ../Inc/TaskUpdate.h
+project3_starter\taskcustomerenqueue.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+project3_starter\taskcustomerenqueue.o: ../Inc/usart.h
+project3_starter\taskcustomerenqueue.o: ../Inc/main.h
+project3_starter\taskcustomerenqueue.o: ../Inc/TaskTeller.h
+project3_starter\taskcustomerenqueue.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+project3_starter\taskcustomerenqueue.o: ../Inc/rng.h
+project3_starter\taskcustomerenqueue.o: ../Inc/TaskCustomerEnqueue.h

@@ -63,6 +63,13 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "Customer.h"
+#include "Teller.h"
+#include "Break.h"
+#include "TaskUpdate.h"
+#include "TaskTeller.h"
+#include "TaskCustomerEnqueue.h"
+
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -94,10 +101,14 @@ void Error_Handler(void);
 #define T_MINUTE	(60 * T_SECOND)
 #define T_HOUR 		(60 * T_MINUTE)
 
+#define BANK_START_TIME 	(0) 						// 0s after 9am
+#define BANK_CLOSE_TIME 	(7 * T_HOUR)		// 25200s (7 hours) after 9am (4pm)
 
-#define BANK_START_TIME 	(0) 			// 0s after 9am
-#define BANK_CLOSE_TIME 	(8 * T_HOUR)		// 25200s (7 hours) after 9am (4pm)
+#define CUSTOMER_QUEUE_LENGTH		(50)
+#define CUSTOMER_LIST_LENGTH		(421)
 
+#define TELLER_LIST_OF_CUSTOMERS_LENGTH	(421)
+#define TELLER_LIST_OF_BREAKS_LENGTH		(15)
 
 
 /* USER CODE END Private defines */

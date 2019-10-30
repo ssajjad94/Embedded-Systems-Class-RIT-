@@ -1,5 +1,5 @@
 project3_starter\customer.o: Customer.c
-project3_starter\customer.o: Customer.h
+project3_starter\customer.o: ../Inc/Customer.h
 project3_starter\customer.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h
 project3_starter\customer.o: ../Inc/stm32l4xx_hal_conf.h
 project3_starter\customer.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h

@@ -1,5 +1,5 @@
 project3_starter\break.o: Break.c
-project3_starter\break.o: Break.h
+project3_starter\break.o: ../Inc/Break.h
 project3_starter\break.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h
 project3_starter\break.o: ../Inc/stm32l4xx_hal_conf.h
 project3_starter\break.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h

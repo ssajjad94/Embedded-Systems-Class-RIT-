@@ -10,7 +10,7 @@
       <TargetName>Project3_Starter</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060300::V5.06 update 3 (build 300)::ARMCC</pCCUsed>
+      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -397,19 +397,9 @@
               <FilePath>.\TaskUpdate.c</FilePath>
             </File>
             <File>
-              <FileName>TaskUpdate.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\TaskUpdate.h</FilePath>
-            </File>
-            <File>
               <FileName>TaskCustomerEnqueue.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\TaskCustomerEnqueue.c</FilePath>
-            </File>
-            <File>
-              <FileName>TaskCustomerEnqueue.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\TaskCustomerEnqueue.h</FilePath>
             </File>
             <File>
               <FileName>TaskTeller.c</FileName>
@@ -417,19 +407,9 @@
               <FilePath>.\TaskTeller.c</FilePath>
             </File>
             <File>
-              <FileName>TaskTeller.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\TaskTeller.h</FilePath>
-            </File>
-            <File>
               <FileName>Customer.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Customer.c</FilePath>
-            </File>
-            <File>
-              <FileName>Customer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Customer.h</FilePath>
             </File>
             <File>
               <FileName>Teller.c</FileName>
@@ -437,19 +417,9 @@
               <FilePath>.\Teller.c</FilePath>
             </File>
             <File>
-              <FileName>Teller.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Teller.h</FilePath>
-            </File>
-            <File>
               <FileName>Break.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Break.c</FilePath>
-            </File>
-            <File>
-              <FileName>Break.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Break.h</FilePath>
             </File>
             <File>
               <FileName>led_task.c</FileName>

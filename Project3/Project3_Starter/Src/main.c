@@ -110,6 +110,44 @@ int main(void)
 
   /* USER CODE BEGIN Init */
 
+	uint32_t simulation_clock = 0;
+	QueueHandle_t customer_queue;
+	
+	// Initialize the queue
+	customer_queue = xQueueCreate(CUSTOMER_QUEUE_LENGTH, sizeof(Customer));
+	if ( customer_queue == NULL )
+	{
+		USART_Printf("Failed to create queue\n\r");
+		
+		while(1){;;}
+	}
+	
+	// Initialize the three tellers
+	Teller tellers[3];
+	for (int i = 0; i < 3; i++)
+	{
+		tellers[i].status = Idle;
+		tellers[i].serviced_customers_cnt = 0;
+		tellers[i].break_cnt = 0;
+	}
+	
+	Customer teller0_customer_list[TELLER_LIST_OF_CUSTOMERS_LENGTH];
+	Customer teller1_customer_list[TELLER_LIST_OF_CUSTOMERS_LENGTH];
+	Customer teller2_customer_list[TELLER_LIST_OF_CUSTOMERS_LENGTH];
+	
+	Break teller0_break_list[TELLER_LIST_OF_BREAKS_LENGTH];
+	Break teller1_break_list[TELLER_LIST_OF_BREAKS_LENGTH];
+	Break teller2_break_list[TELLER_LIST_OF_BREAKS_LENGTH];
+	
+	tellers[0].serviced_customers = teller0_customer_list;
+	tellers[1].serviced_customers = teller1_customer_list;
+	tellers[2].serviced_customers = teller2_customer_list;
+	
+	tellers[0].breaks = teller0_break_list;
+	tellers[1].breaks = teller1_break_list;
+	tellers[2].breaks = teller2_break_list;
+	
+	
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -124,8 +162,11 @@ int main(void)
   MX_RNG_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  led_task_init(0, "LED_TASK_0", 100, 500);
-  led_task_init(1, "LED_TASK_1", 1000, 1000);
+	
+  // led_task_init(0, "LED_TASK_0", 100, 500);
+  // led_task_init(1, "LED_TASK_1", 1000, 1000);
+	
+	update_task_init("UPDATE_TASK", &simulation_clock, &customer_queue, tellers);
   
   // USART_Printf is printf() customized to this platform and uses a variable argugment list.
   // It is convenient but unnecessary.  You can use HAL functions (e.g. HAL_USART_Transmit())

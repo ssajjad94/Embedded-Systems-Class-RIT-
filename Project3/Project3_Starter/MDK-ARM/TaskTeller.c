@@ -1,5 +1,7 @@
 #include "TaskTeller.h"
 
+TELLERSERVICE_PARAMS_t teller_service_params[NUMBER_OF_TELLERS];
+
 /*
 	Task execution. 
 */
@@ -88,7 +90,7 @@ void TakeCustomerFromQueue(int tellerID)
 	uint32_t* simulation_clock_ptr = (&teller_service_params[tellerID])->SimulationClockPtr;
 	
 	// Get a customer from the queue pointer
-	QueueHandle_t* queue = (&teller_service_params[tellerID])->CustomerQueuePtr;
+	QueueHandle_t queue = *((&teller_service_params[tellerID])->CustomerQueuePtr);
 	
 	Customer nextCustomer;
 	if (pdPASS == xQueueReceive(queue, &nextCustomer, 0))

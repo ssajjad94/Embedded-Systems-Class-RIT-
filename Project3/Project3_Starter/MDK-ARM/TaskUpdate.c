@@ -1,5 +1,7 @@
 #include "TaskUpdate.h"
 
+UPDATE_PARAMS_t update_params;
+
 /*
 	Task execution. 
 */
@@ -67,12 +69,15 @@ void UpdateDisplay()
 	// Get the data to print
 	UPDATE_PARAMS_t *p = &update_params;
 	
+	// Get the queue
+	QueueHandle_t queue = *(p->CustomerQueuePtr);
+	
 	// Print current time
 	uint32_t currentTime = *(p->SimulationClockPtr);
 	USART_Printf("Current time (in seconds): %d \n\r", currentTime);
 	
 	// Print number of customers waiting in the queue
-	uint16_t numberOfCustomers = uxQueueMessagesWaiting(p->CustomerQueuePtr);
+	uint16_t numberOfCustomers = uxQueueMessagesWaiting(queue);
 	USART_Printf("Number of customers on the queue: %d \n\r", numberOfCustomers);
 	
 	// Print status of each teller
@@ -93,6 +98,11 @@ void UpdateDisplay()
 		else if (current_teller.status == OnBreak)
 		{
 			USART_Printf("ON_BREAK\n\r");
+		}
+		else
+		{
+			// Error case. Should not enter here.
+			USART_Printf("UNKNOWN_ERR\n\r");
 		}
 	}
 }
