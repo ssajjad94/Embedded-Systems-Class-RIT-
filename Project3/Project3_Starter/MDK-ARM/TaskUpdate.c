@@ -20,8 +20,11 @@ void update_task(void *parameters)
 		// Update display with data
 		UpdateDisplay();
 		
-		// Update metrics
-		DisplayMetrics();
+		// Display metrics at the end
+		if (!IsBankOpen())
+		{
+			DisplayMetrics();
+		}
 	}
 }
 
@@ -41,6 +44,10 @@ void update_task_init(char *update_task_name, uint32_t* simulation_clock_ptr,
 	p->CustomerQueuePtr = customer_queue_ptr;
 	p->TellerPtr = teller_ptr;
 	
+	// Keep track of the start time
+	float timeInSeconds = ( (float) xTaskGetTickCount() ) / ( (float) configTICK_RATE_HZ );
+	p->simulationStartTimeInSeconds = timeInSeconds * REAL_TO_SIMULATED_RATIO;
+	
 	// Create the task
   xTaskCreate( update_task, "UPDATE TASK", 256, (void *)p, 2, &p->handle);
 }
@@ -51,19 +58,19 @@ void update_task_init(char *update_task_name, uint32_t* simulation_clock_ptr,
 */
 void UpdateTime()
 {
-	// Calculate the real elapsed time
+	// Get params
+	UPDATE_PARAMS_t *p = &update_params; 
+	
+	// Calculate the real elapsed time (use float to preserve precision in division process)
 	uint32_t tickCount = xTaskGetTickCount();
-	uint32_t timeInMilliseconds = tickCount / ((configTICK_RATE_HZ / 1000)) ;
+	float timeInSeconds = ( (float) tickCount ) / ( (float) configTICK_RATE_HZ );
 	
 	// Convert the real time to simulation time
-		// 100ms in real time = 1 minute in simulation time
-		// 	so 1 second in real time = 600 seconds in simulation time
-	uint32_t simulationTimeInMilliseconds = timeInMilliseconds * 60;
-	uint32_t simulationTimeInSeconds = simulationTimeInMilliseconds / 1000;
+	float simulationTimeInSeconds = timeInSeconds * REAL_TO_SIMULATED_RATIO;
 	
 	// Set the simulation clock to the elapsed time
-	UPDATE_PARAMS_t *p = &update_params;
-	*(p->SimulationClockPtr) = simulationTimeInSeconds;
+	float elapsedTime = (simulationTimeInSeconds - p->simulationStartTimeInSeconds);
+	*(p->SimulationClockPtr) = (uint32_t) elapsedTime;
 }
 
 /*
@@ -83,13 +90,22 @@ void UpdateDisplay()
 	// Print current time
 	uint32_t currentTime = *(p->SimulationClockPtr);
 	
-	uint16_t currentTimeHours = 7 + (currentTime / T_HOUR);
+	uint16_t currentTimeHours = 9 + (currentTime / T_HOUR);
 	if (currentTimeHours > 12)
 		currentTimeHours -= 12;
 	uint16_t currentTimeMins = (currentTime % T_HOUR) / T_MINUTE;
 	
-	USART_Printf("Current time (in seconds): %5d \t %2.d:%2.d\n\r", currentTime, 
+	USART_Printf("Current time (in seconds): %5d \t %02d:%02d\n\r", currentTime, 
 				currentTimeHours, currentTimeMins);
+	
+	if (IsBankOpen())
+	{
+		USART_Printf("The bank is currently open. \n\r");
+	}
+	else
+	{
+		USART_Printf("The bank is currently closed. \n\r");
+	}
 	
 	// Print number of customers waiting in the queue
 	uint16_t numberOfCustomers = uxQueueMessagesWaiting(queue);
@@ -160,7 +176,8 @@ void UpdateDisplay()
 			else
 			{
 				nextBreakTime = 0;	// Already on break
-				timeLeftOnBreak = nextBreak.end_time - *(p->SimulationClockPtr);
+				if (nextBreak.end_time > *(p->SimulationClockPtr))
+					timeLeftOnBreak = nextBreak.end_time - *(p->SimulationClockPtr);
 				on_break = 1;
 			}
 		}

@@ -94,30 +94,47 @@ void Error_Handler(void);
 
 void DisplayMetrics(void);
 
+uint8_t IsBankOpen(void);
+
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
 /* USER CODE BEGIN Private defines */
 
+// Macros to define time
 #define T_SECOND	(1)
 #define T_MINUTE	(60 * T_SECOND)
 #define T_HOUR 		(60 * T_MINUTE)
 
+// Macro to define simulated time based on real time
+	// 100ms = 1min = 60s
+	// 1s = 600s
+#define REAL_TO_SIMULATED_RATIO	(600)
+
+
+// Bank hours
 #define BANK_START_TIME 	(0) 						// 0s after 9am
 #define BANK_CLOSE_TIME 	(7 * T_HOUR)		// 25200s (7 hours) after 9am (4pm)
 
+
+// Customer queue and list
 #define CUSTOMER_QUEUE_LENGTH		(50)
 #define CUSTOMER_LIST_LENGTH		(421)
+	// Max number of custoemrs comes from 7 hours, worst cast 1 customer per minute
 
+// Teller's individual list of customers
 #define TELLER_LIST_OF_CUSTOMERS_LENGTH	(421)
 #define TELLER_LIST_OF_BREAKS_LENGTH		(15)
 
+// Range for random customer service time
 #define MIN_CUSTOMER_SERVICE_TIME	(30 * T_SECOND)
 #define MAX_CUSTOMER_SERVICE_TIME	(8 * T_MINUTE)
 
+// Range for random break time
 #define MIN_BREAK_TIME				(1 * T_MINUTE)
 #define MAX_BREAK_TIME				(4 * T_MINUTE)
 
+// Range for scheduling next break time
 #define MIN_NEXT_BREAK_TIME		(30 * T_MINUTE)
 #define MAX_NEXT_BREAK_TIME		(60 * T_MINUTE)
 

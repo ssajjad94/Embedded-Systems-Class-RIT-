@@ -18,6 +18,9 @@ typedef struct {
 	// A pointer to main's simulation clock. How many seconds has passed since 9am (program beginning). 
 	uint32_t* SimulationClockPtr; 
 	
+	// A stored value of the simulation start time
+	float simulationStartTimeInSeconds;
+	
 	// A pointer to the queue of all customers in the queue
 	QueueHandle_t* CustomerQueuePtr;
 	

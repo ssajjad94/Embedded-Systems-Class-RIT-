@@ -321,8 +321,177 @@ void DisplayMetrics()
 {
 	// Print metrics
 	
+	// Print the total number of customers served during the day
+	USART_Printf("Total number of customers: %d \n\r", all_customers_cnt);
 	
+	// The number of customers served by each teller
+	USART_Printf("Teller 0's number of customers: %d\n\r", tellers[0].serviced_customers_cnt);
+	USART_Printf("Teller 1's number of customers: %d\n\r", tellers[1].serviced_customers_cnt);
+	USART_Printf("Teller 2's number of customers: %d\n\r", tellers[2].serviced_customers_cnt);
+
+	// The average time each customer spends waiting in the queue.
+	uint32_t maxTimeCustomerWaitingInQueue = 0;
+	uint32_t totalTimeCustomerWaitingInQueue = 0;
+	for (int i = 0; i < all_customers_cnt; i++)
+	{
+		// The time each customer spends waiting in the queue is the
+		//		difference between their service start time and arrival time
+		uint32_t timeWaiting = all_customers[i].service_start_time - all_customers[i].arrival_time;
+		
+		totalTimeCustomerWaitingInQueue += timeWaiting;
+		
+		if (timeWaiting > maxTimeCustomerWaitingInQueue)
+			maxTimeCustomerWaitingInQueue = timeWaiting;
+	}
+	uint32_t avgTimeCustomerWaitingInQueue = totalTimeCustomerWaitingInQueue / all_customers_cnt;
+	USART_Printf("Average time customer spends waiting "); 
+	USART_Printf("in the queue: %d seconds\n\r", avgTimeCustomerWaitingInQueue);
+	
+	// The average time each customer spends with the teller.
+	uint32_t totalTimeCustomerServiced = 0;
+	for (int i = 0; i < all_customers_cnt; i++)
+	{
+		// The time each customer spends waiting in the queue is the
+		//		difference between their service start time and arrival time
+		totalTimeCustomerServiced = all_customers[i].service_end_time - all_customers[i].service_start_time;
+	}
+	uint32_t avgTimeCustomerServiced = totalTimeCustomerServiced / all_customers_cnt;
+	USART_Printf("Average time customer spends ");
+	USART_Printf("with the teller: %d seconds\n\r", avgTimeCustomerServiced);
+	
+	// The average time tellers wait for customers.
+	uint32_t maxTimeWaitingForCustomer = 0;
+	uint32_t totalTimeWaitingForCustomer = 0;
+	for (int id = 0; id < 3; id++)
+	{
+		Teller teller = tellers[id];
+		
+		if (teller.serviced_customers_cnt > 0)
+		{
+			// The first customer's wait time is from 0 to their service start time
+			uint32_t firstCustomerWait = teller.serviced_customers[0].service_start_time;
+			totalTimeWaitingForCustomer += firstCustomerWait;
+			
+			if (firstCustomerWait > maxTimeWaitingForCustomer)
+					maxTimeWaitingForCustomer = firstCustomerWait;
+				
+			for (int i = 1; i < teller.serviced_customers_cnt; i++)
+			{
+				// Subsequent customer's wait time is from previous's end time to 
+				//		next start time
+				uint32_t timeWaiting = teller.serviced_customers[i].service_start_time 
+					- teller.serviced_customers[i-1].service_end_time ;
+				totalTimeWaitingForCustomer += timeWaiting;
+				
+				if (timeWaiting > maxTimeWaitingForCustomer)
+					maxTimeWaitingForCustomer = timeWaiting;
+			}
+		}
+	}
+	uint32_t avgTimeWaitingForCustomer = totalTimeWaitingForCustomer / all_customers_cnt;
+	USART_Printf("Average time teller waits for ");
+	USART_Printf("customers: %d seconds\n\r", avgTimeWaitingForCustomer);
+
+	// The maximum customer wait time in the queue. 
+	USART_Printf("Maximum time customer spends ");
+	USART_Printf("waiting in the queue: %d seconds\n\r", maxTimeCustomerWaitingInQueue);
+	
+	// The maximum wait time for tellers waiting for customers. 
+	USART_Printf("Maximum time teller waits ");
+	USART_Printf("for customers: %d seconds\n\r", maxTimeWaitingForCustomer);
+	
+	// The maximum transaction time for the tellers.
+	for (int id = 0; id < 3; id++)
+	{
+		Teller teller = tellers[id];
+		
+		uint32_t maxBusyTime = 0;
+		for (int i = 0; i < teller.serviced_customers_cnt; i++)
+		{
+			// The busy time is the difference between end service time and start service time
+			uint32_t busyTime = teller.serviced_customers[i].service_end_time - teller.serviced_customers[i].service_start_time;
+			
+			if (busyTime > maxBusyTime)
+				maxBusyTime = busyTime;
+		}
+		
+		USART_Printf("Teller %d's maximum transaction ");
+		USART_Printf("time: %d seconds\n\r", id, maxBusyTime);
+	}
+	
+	// The maximum depth of the customer queue.
+	USART_Printf("Maximum depth of the customer ");
+	USART_Printf("queue: %d\n\r", max_customer_queue_cnt);
+
+	for (int id = 0; id < 3; id++)
+	{
+		Teller teller = tellers[id];
+		
+		uint32_t totalBreakTime = 0;
+		uint32_t minBreakTime = 0;
+		uint32_t maxBreakTime = 0;
+		
+		for (int i = 0; i < teller.break_cnt; i++)
+		{
+			// Break time is the difference between the break's end time and start time
+			uint32_t break_time = teller.breaks[i].end_time - teller.breaks[i].start_time;
+			
+			totalBreakTime += break_time;
+			
+			// Update max break time
+			if (break_time > maxBreakTime)
+			{
+				maxBreakTime = break_time;
+			}
+			
+			// Update min break time
+			if (i == 0)
+			{
+				// First break -> auto set to minimum
+				minBreakTime = break_time;
+			}
+			else
+			{
+				// Subsequent breaks -> compare to minimum
+				if (break_time < minBreakTime)
+				{
+					minBreakTime = break_time;
+				}
+			}
+		}
+		
+		uint32_t avgBreakTime = totalBreakTime / teller.break_cnt;
+		
+		// Number of breaks for each of the three tellers
+		USART_Printf("Teller %d's number of breaks: %d\n\r", id, teller.break_cnt);
+
+		// Average break time for each of the three tellers
+		USART_Printf("Teller %d's average break time: %d\n\r", id, avgBreakTime);
+
+		// Longest break time for each of the three tellers
+		USART_Printf("Teller %d's longest break time: %d\n\r", id, maxBreakTime);
+
+		// Shortest break time for each of the three tellers
+		USART_Printf("Teller %d's shortest break time: %d\n\r", id, minBreakTime);
+	}
+
 }
+
+/**
+	* Helper function to check if the bank is open
+	*/
+uint8_t IsBankOpen(void)
+{
+	if (simulation_clock >= BANK_START_TIME && simulation_clock <= BANK_CLOSE_TIME)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 
 /* USER CODE END 4 */
 
