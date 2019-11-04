@@ -1,0 +1,2 @@
+Freqeuncy -> interrupt rate of the DAC.
+		or decrease number of points (less time resolution; need to make adjustments). 
