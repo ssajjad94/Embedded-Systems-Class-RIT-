@@ -10,7 +10,7 @@
       <TargetName>Project3_Starter</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060300::V5.06 update 3 (build 300)::ARMCC</pCCUsed>
+      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -392,14 +392,19 @@
           <GroupName>Application/User</GroupName>
           <Files>
             <File>
+              <FileName>recipe_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\recipe_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_command_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\user_command_task.c</FilePath>
+            </File>
+            <File>
               <FileName>led_task.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Src\led_task.c</FilePath>
-            </File>
-            <File>
-              <FileName>led_task.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Inc\led_task.h</FilePath>
             </File>
             <File>
               <FileName>main.c</FileName>
@@ -440,6 +445,21 @@
               <FileName>stm32l4xx_hal_timebase_tim.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/stm32l4xx_hal_timebase_tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>PWM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\PWM.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>LED.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\LED.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -605,6 +625,86 @@
               <FileName>port.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Header Files</GroupName>
+          <Files>
+            <File>
+              <FileName>recipe.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\recipe.h</FilePath>
+            </File>
+            <File>
+              <FileName>recipe_task.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\recipe_task.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_command_task.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\user_command_task.h</FilePath>
+            </File>
+            <File>
+              <FileName>FreeRTOSConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\FreeRTOSConfig.h</FilePath>
+            </File>
+            <File>
+              <FileName>gpio.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\gpio.h</FilePath>
+            </File>
+            <File>
+              <FileName>led_task.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\led_task.h</FilePath>
+            </File>
+            <File>
+              <FileName>main.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\main.h</FilePath>
+            </File>
+            <File>
+              <FileName>PWM.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\PWM.h</FilePath>
+            </File>
+            <File>
+              <FileName>rng.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\rng.h</FilePath>
+            </File>
+            <File>
+              <FileName>stm32l4xx_hal_conf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\stm32l4xx_hal_conf.h</FilePath>
+            </File>
+            <File>
+              <FileName>stm32l4xx_it.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\stm32l4xx_it.h</FilePath>
+            </File>
+            <File>
+              <FileName>usart.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\usart.h</FilePath>
+            </File>
+            <File>
+              <FileName>prewritten_recipes.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\prewritten_recipes.h</FilePath>
+            </File>
+            <File>
+              <FileName>timer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\timer.h</FilePath>
+            </File>
+            <File>
+              <FileName>LED.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\LED.h</FilePath>
             </File>
           </Files>
         </Group>

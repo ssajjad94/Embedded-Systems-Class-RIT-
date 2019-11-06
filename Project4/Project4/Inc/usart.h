@@ -70,6 +70,7 @@ void MX_USART2_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 void USART_Printf(const char *fmt, ...);
+uint8_t USART_ReadAsync(void);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

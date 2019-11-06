@@ -54,6 +54,9 @@
 #include "rng.h"
 #include "usart.h"
 #include "gpio.h"
+#include "timer.h"
+#include "LED.h"
+#include "prewritten_recipes.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -124,12 +127,19 @@ int main(void)
   MX_RNG_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  led_task_init(0, "LED_TASK_0", 100, 500);
-  led_task_init(1, "LED_TASK_1", 1000, 1000);
   
+	InitTimerForPWM();
+	InitGPIOForPWM();
+	LED_Init();
+	InitTimer3();
+	
+	recipe_task_init(0, "RECIPE TASK 0", recipie_test_0, sizeof(recipie_test_0) / sizeof(char));
+	recipe_task_init(1, "RECIPE TASK 1", recipie_test_0, sizeof(recipie_test_0) / sizeof(char));
+	user_command_task_init("User command task.");
+	
   // USART_Printf is printf() customized to this platform and uses a variable argugment list.
   // It is convenient but unnecessary.  You can use HAL functions (e.g. HAL_USART_Transmit())
-  USART_Printf("System initialized, starting FreeRTOS\r\n");
+  // USART_Printf("System initialized, starting FreeRTOS\r\n");
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */

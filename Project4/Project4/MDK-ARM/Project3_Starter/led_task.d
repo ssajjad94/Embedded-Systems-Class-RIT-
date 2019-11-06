@@ -34,6 +34,9 @@ project3_starter\led_task.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_t
 project3_starter\led_task.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h
 project3_starter\led_task.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h
 project3_starter\led_task.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h
+project3_starter\led_task.o: ../Inc/PWM.h
+project3_starter\led_task.o: ../Inc/recipe.h
+project3_starter\led_task.o: ../Inc/recipe_task.h
 project3_starter\led_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 project3_starter\led_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 project3_starter\led_task.o: ../Inc/FreeRTOSConfig.h
@@ -48,8 +51,14 @@ project3_starter\led_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/
 project3_starter\led_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
 project3_starter\led_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 project3_starter\led_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
+project3_starter\led_task.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+project3_starter\led_task.o: ../Inc/timer.h
+project3_starter\led_task.o: ../Inc/LED.h
+project3_starter\led_task.o: ../Inc/user_command_task.h
+project3_starter\led_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+project3_starter\led_task.o: ../Inc/usart.h
+project3_starter\led_task.o: ../Inc/main.h
+project3_starter\led_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 project3_starter\led_task.o: ../Inc/led_task.h
 project3_starter\led_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 project3_starter\led_task.o: ../Inc/rng.h
-project3_starter\led_task.o: ../Inc/usart.h
-project3_starter\led_task.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h

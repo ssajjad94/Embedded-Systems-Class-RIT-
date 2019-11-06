@@ -5,9 +5,12 @@
 #include "cmsis_os.h"
 
 #include "string.h"
-
 #include "recipe.h"
 #include "PWM.h"
+#include "timer.h"
+#include "LED.h"
+
+#include "user_command_task.h"
 
 typedef struct {
   uint8_t id; // 0 or 1
@@ -55,6 +58,12 @@ void TogglePauseRecipe(uint8_t id, uint8_t pause);
 
 // Tries to load and run next recipe
 void RunRecipe(uint8_t id);
+
+// Perform user command
+void PerformCommand(uint8_t id, char command);
+
+// Check for errors and toggle the LEDs
+void PollForLEDErrors(uint8_t id);
 
 #endif
 

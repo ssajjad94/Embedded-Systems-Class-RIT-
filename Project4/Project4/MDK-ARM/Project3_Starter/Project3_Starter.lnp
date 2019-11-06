@@ -1,5 +1,7 @@
---cpu Cortex-M4.fp --branchpatch=sdcomp-29491-629360
+--cpu=Cortex-M4.fp --branchpatch=sdcomp-29491-629360
 "project3_starter\startup_stm32l476xx.o"
+"project3_starter\recipe_task.o"
+"project3_starter\user_command_task.o"
 "project3_starter\led_task.o"
 "project3_starter\main.o"
 "project3_starter\gpio.o"
@@ -9,6 +11,9 @@
 "project3_starter\stm32l4xx_it.o"
 "project3_starter\stm32l4xx_hal_msp.o"
 "project3_starter\stm32l4xx_hal_timebase_tim.o"
+"project3_starter\pwm.o"
+"project3_starter\timer.o"
+"project3_starter\led.o"
 "project3_starter\stm32l4xx_hal_rng.o"
 "project3_starter\stm32l4xx_hal_tim.o"
 "project3_starter\stm32l4xx_hal_tim_ex.o"
@@ -40,6 +45,6 @@
 "project3_starter\heap_4.o"
 "project3_starter\port.o"
 --library_type=microlib --strict --scatter "Project3_Starter\Project3_Starter.sct"
---summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
 --list "Project3_Starter.map" -o Project3_Starter\Project3_Starter.axf

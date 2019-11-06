@@ -20,15 +20,4 @@
 #define MAX_RECIPE_LEN	(100)
 #define WAIT_ITER_AFTER_MOV (5)
 
-/*
-// Restart recipe
-void RestartRecipe(struct RecipeThread* thread);
-
-// Toggles whether or not the recipe is paused.
-void TogglePauseRecipe(struct RecipeThread* thread, uint8_t pause);
-
-// Continuous update loop to be called
-void RunRecipe(struct RecipeThread* thread);
-*/
-
 #endif

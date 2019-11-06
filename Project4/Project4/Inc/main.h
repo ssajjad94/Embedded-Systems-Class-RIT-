@@ -63,6 +63,12 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "PWM.h"
+#include "recipe.h"
+
+#include "recipe_task.h"
+#include "user_command_task.h"
+
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -72,6 +78,8 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
+
+// This recipe demonstrates the desired test recipe from the lab exercise description
 
 /* USER CODE END EC */
 
