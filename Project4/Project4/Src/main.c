@@ -54,13 +54,20 @@
 #include "rng.h"
 #include "usart.h"
 #include "gpio.h"
-#include "timer.h"
-#include "LED.h"
-#include "prewritten_recipes.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "led_task.h"           // needed for led_task_init
+
+#include "recipe_task.h"
+#include "user_command_task.h"
+
+#include "prewritten_recipes.h"
+#include "timer.h"
+#include "LED.h"
+#include "PWM.h"
+
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -139,7 +146,7 @@ int main(void)
 	
   // USART_Printf is printf() customized to this platform and uses a variable argugment list.
   // It is convenient but unnecessary.  You can use HAL functions (e.g. HAL_USART_Transmit())
-  // USART_Printf("System initialized, starting FreeRTOS\r\n");
+  USART_Printf("System initialized, starting FreeRTOS\r\n");
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */

@@ -1,7 +1,7 @@
 [PreviousGenFiles]
-HeaderPath=C:/Users/rickw/Desktop/Project3_Starter/Inc
+HeaderPath=//gleep.se.rit.edu/home/fall2019/dl3061/Documents/CMPE663/real-time-and-embedded-systems/Project4/Project4/Inc
 HeaderFiles=gpio.h;FreeRTOSConfig.h;rng.h;usart.h;stm32l4xx_it.h;stm32l4xx_hal_conf.h;main.h;
-SourcePath=C:/Users/rickw/Desktop/Project3_Starter/Src
+SourcePath=//gleep.se.rit.edu/home/fall2019/dl3061/Documents/CMPE663/real-time-and-embedded-systems/Project4/Project4/Src
 SourceFiles=gpio.c;freertos.c;rng.c;usart.c;stm32l4xx_it.c;stm32l4xx_hal_msp.c;stm32l4xx_hal_timebase_tim.c;main.c;
 
 [PreviousLibFiles]

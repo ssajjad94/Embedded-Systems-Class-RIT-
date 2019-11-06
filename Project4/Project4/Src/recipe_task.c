@@ -1,5 +1,7 @@
 #include "recipe_task.h"
 
+RECIPE_PARAMS_t recipe_params[2];
+
 /*
 	Task execution. 
 */

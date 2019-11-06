@@ -61,6 +61,6 @@ project3_starter\main.o: ../Inc/main.h
 project3_starter\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 project3_starter\main.o: ../Inc/rng.h
 project3_starter\main.o: ../Inc/gpio.h
-project3_starter\main.o: ../Inc/prewritten_recipes.h
 project3_starter\main.o: ../Inc/led_task.h
 project3_starter\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+project3_starter\main.o: ../Inc/prewritten_recipes.h

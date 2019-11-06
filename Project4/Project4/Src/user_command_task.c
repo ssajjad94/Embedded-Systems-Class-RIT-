@@ -1,5 +1,7 @@
 #include "user_command_task.h"
 
+USER_COMMAND_PARAMS_t user_command_params;
+
 /*
 	Task execution. 
 */
