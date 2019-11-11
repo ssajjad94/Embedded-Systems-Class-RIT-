@@ -86,6 +86,9 @@ void PollForInputs(void)
 			inputBuffer[0] = inputBuffer[1];
 			inputBuffer[1] = inputBuffer[2];
 			inputBuffer[2] = rxByte[0];
+			
+			// Print the current buffer
+			// USART_Printf(rxByte);
 		}
 	}
 }

@@ -12,12 +12,13 @@ void InitPWM(void);
 #define PWM_OFFSET							3				
 	// Because some servo boxes are different, things may need to shift a bit
 
-#define PWM_WIDTH_0							4	+ PWM_OFFSET
-#define PWM_WIDTH_1							7 + PWM_OFFSET
-#define PWM_WIDTH_2							10 + PWM_OFFSET
-#define PWM_WIDTH_3							13 + PWM_OFFSET
-#define PWM_WIDTH_4							16 + PWM_OFFSET
-#define PWM_WIDTH_5							20 + PWM_OFFSET	
+#define PWM_SCALE										(5)
+#define PWM_WIDTH_0							(PWM_SCALE*4	+ PWM_OFFSET)
+#define PWM_WIDTH_1							(PWM_SCALE*7 + PWM_OFFSET)
+#define PWM_WIDTH_2							(PWM_SCALE*10 + PWM_OFFSET)
+#define PWM_WIDTH_3							(PWM_SCALE*13 + PWM_OFFSET)
+#define PWM_WIDTH_4							(PWM_SCALE*16 + PWM_OFFSET)
+#define PWM_WIDTH_5							(PWM_SCALE*20 + PWM_OFFSET)
 
 void SetPWMPulsePosition(uint8_t servo, uint8_t position);
 

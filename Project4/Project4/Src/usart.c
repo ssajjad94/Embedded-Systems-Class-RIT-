@@ -82,24 +82,23 @@ uint8_t USART_ReadAsync()
 	rxChar[0] = 0x00;
 	rxChar[1] = 0x00;
 	
-	HAL_UART_Receive(&huart2, (uint8_t *) rxChar, strlen(rxChar), 0);
+	//HAL_UART_Receive(&huart2, (uint8_t *) rxChar, strlen(rxChar), 0);
 	
-	/*
+	
 	// SR_RXNE (Read data register not empty) bit is set by hardware
-	if (USARTx->ISR & USART_ISR_RXNE)
+	if (USART2->ISR & USART_ISR_RXNE)
 	{
 		// Wait until RXNE (RX not empty) bit is set
 		// USART resets the RXNE flag automatically after reading DR
 		// Reading USART_DR automatically clears the RXNE flag 
 		
-		rxChar[0] = (uint8_t)(USARTx->RDR & 0xFF);
+		rxChar[0] = (uint8_t)(USART2->RDR & 0xFF);
 		rxChar[1] = 0x00;
 	}
-	*/
+	
 	
 	if (rxChar[0] != '\r')
 		USART_Printf(rxChar);
-	
 	
 	return (rxChar[0]);
 }

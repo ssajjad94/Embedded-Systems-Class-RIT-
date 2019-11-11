@@ -25,9 +25,9 @@ void SetPWMPulsePosition(uint8_t servo, uint8_t position)
 		uint16_t width = 0;
 		
 		// Set Last Position
-		if (servo == 1)
+		if (servo == 0)
 			PWMOneLastPosition = position;
-		else if (servo == 2)
+		else
 			PWMTwoLastPosition = position;
 		
 		// Translate position to a width
@@ -57,9 +57,9 @@ void SetPWMPulsePosition(uint8_t servo, uint8_t position)
 		} 
 		
 		// Set the proper motor
-		if (servo == 1)
+		if (servo == 0)
 			SetPWMPulseWidth1(width);
-		else if (servo == 2)
+		else
 			SetPWMPulseWidth2(width);
 	}
 }
@@ -68,9 +68,9 @@ void SetPWMPulsePosition(uint8_t servo, uint8_t position)
 void ShiftPWMLeft(uint8_t servo)
 {
 	uint8_t lastPosition = 0;
-	if (servo == 1)
+	if (servo == 0)
 		lastPosition = PWMOneLastPosition;
-	else if (servo == 2)
+	else 
 		lastPosition = PWMTwoLastPosition;
 	
 	if (lastPosition > 0)
@@ -83,9 +83,9 @@ void ShiftPWMLeft(uint8_t servo)
 void ShiftPWMRight(uint8_t servo)
 {
 	uint8_t lastPosition = 0;
-	if (servo == 1)
+	if (servo == 0)
 		lastPosition = PWMOneLastPosition;
-	else if (servo == 2)
+	else 
 		lastPosition = PWMTwoLastPosition;
 	
 	if (lastPosition < 5)

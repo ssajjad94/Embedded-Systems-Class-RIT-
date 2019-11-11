@@ -134,15 +134,20 @@ int main(void)
   MX_RNG_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  
-	InitTimerForPWM();
-	InitGPIOForPWM();
+	
+	USART_Printf("At start, before init functions. \r\n");
+	
+	InitPWM();
 	LED_Init();
 	InitTimer3();
 	
+	USART_Printf("At start, after init but before initializing tasks. \r\n");
+	
 	recipe_task_init(0, "RECIPE TASK 0", recipie_test_0, sizeof(recipie_test_0) / sizeof(char));
-	recipe_task_init(1, "RECIPE TASK 1", recipie_test_0, sizeof(recipie_test_0) / sizeof(char));
+	recipe_task_init(1, "RECIPE TASK 1", recipie_test_1, sizeof(recipie_test_1) / sizeof(char));
 	user_command_task_init("User command task.");
+	
+	USART_Printf("Initialized tasks. \r\n");
 	
   // USART_Printf is printf() customized to this platform and uses a variable argugment list.
   // It is convenient but unnecessary.  You can use HAL functions (e.g. HAL_USART_Transmit())

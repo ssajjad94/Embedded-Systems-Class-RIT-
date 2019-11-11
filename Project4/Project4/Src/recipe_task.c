@@ -14,6 +14,7 @@ void recipe_task(void *parameters)
 	{
 		// Check if there is a command
 		char command = PopServoChar(id);
+		// char command = 0;
 		if (command != 0)
 		{
 			// Run that command 

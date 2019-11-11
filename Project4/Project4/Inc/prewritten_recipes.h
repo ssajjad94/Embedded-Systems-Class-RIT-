@@ -6,7 +6,6 @@
 char recipie_test_0[] = 
 {
 	(OP_MOV << OPCODE_SHIFT) | 3,
-	(OP_SWEEP << OPCODE_SHIFT),
 	(OP_MOV << OPCODE_SHIFT) | 5,
 	(OP_MOV << OPCODE_SHIFT) | 0,
 	(OP_MOV << OPCODE_SHIFT) | 3,
@@ -21,16 +20,18 @@ char recipie_test_0[] =
 	(OP_WAIT << OPCODE_SHIFT) | 0,
 	(OP_MOV << OPCODE_SHIFT) | 2,
 	(OP_MOV << OPCODE_SHIFT) | 3,
+	(OP_MOV << OPCODE_SHIFT) | 5,
 	(OP_WAIT << OPCODE_SHIFT) | 31,
 	(OP_WAIT << OPCODE_SHIFT) | 31,
 	(OP_WAIT << OPCODE_SHIFT) | 31,
-	(OP_MOV << OPCODE_SHIFT) | 4,
+	(OP_MOV << OPCODE_SHIFT) | 0,
 	(OP_RECIPEEND << OPCODE_SHIFT) 
 };
 
 // This recipe demonstrates moving to every position
 char recipie_test_1[] = 
 {
+	(OP_LOOP << OPCODE_SHIFT) | 1,
 	(OP_MOV << OPCODE_SHIFT) | 1,
 	(OP_MOV << OPCODE_SHIFT) | 2,
 	(OP_MOV << OPCODE_SHIFT) | 3,
@@ -45,6 +46,7 @@ char recipie_test_1[] =
 	(OP_MOV << OPCODE_SHIFT) | 2,
 	(OP_MOV << OPCODE_SHIFT) | 1,
 	(OP_MOV << OPCODE_SHIFT) | 0,
+	(OP_ENDLOOP << OPCODE_SHIFT),
 	(OP_RECIPEEND << OPCODE_SHIFT) 
 };
 
@@ -52,6 +54,7 @@ char recipie_test_1[] =
 //		The last mov should NOT execute, even after running continue.
 char recipie_test_2[] = 
 {
+	(OP_LOOP << OPCODE_SHIFT) | 1,
 	(OP_MOV << OPCODE_SHIFT) | 1,
 	(OP_MOV << OPCODE_SHIFT) | 2,
 	(OP_MOV << OPCODE_SHIFT) | 3,
