@@ -7,6 +7,8 @@ USER_COMMAND_PARAMS_t user_command_params;
 */
 void user_command_task(void *parameters)
 {
+	// USART_Printf("\nPlease input a command: ");
+	
 	while (1)
 	{
 		CheckToClearBuffer();
@@ -52,6 +54,8 @@ void CheckToClearBuffer(void)
 		if (inputBuffer[0] == 0 && inputBuffer[1] == 0)
 		{ 
 			inputBuffer[2] = 0;
+
+			USART_Printf("\n\rPlease input a command: ");
 		}
 	}
 }
@@ -88,7 +92,8 @@ void PollForInputs(void)
 			inputBuffer[2] = rxByte[0];
 			
 			// Print the current buffer
-			// USART_Printf(rxByte);
+			if (rxByte[0] != '\r' && rxByte[0] != '\n')
+				USART_Printf(rxByte);
 		}
 	}
 }

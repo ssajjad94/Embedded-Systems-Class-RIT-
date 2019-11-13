@@ -97,8 +97,8 @@ uint8_t USART_ReadAsync()
 	}
 	
 	
-	if (rxChar[0] != '\r')
-		USART_Printf(rxChar);
+	//if (rxChar[0] != '\r')
+		//USART_Printf(rxChar);
 	
 	return (rxChar[0]);
 }

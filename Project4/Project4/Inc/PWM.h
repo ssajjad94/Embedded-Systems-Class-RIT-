@@ -12,7 +12,7 @@ void InitPWM(void);
 #define PWM_OFFSET							3				
 	// Because some servo boxes are different, things may need to shift a bit
 
-#define PWM_SCALE										(5)
+#define PWM_SCALE								 (1)
 #define PWM_WIDTH_0							(PWM_SCALE*4	+ PWM_OFFSET)
 #define PWM_WIDTH_1							(PWM_SCALE*7 + PWM_OFFSET)
 #define PWM_WIDTH_2							(PWM_SCALE*10 + PWM_OFFSET)
