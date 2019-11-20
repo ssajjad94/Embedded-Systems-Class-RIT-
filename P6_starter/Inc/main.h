@@ -96,6 +96,9 @@ void Error_Handler(void);
 #define GYRO_INT2_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
+#define MIN_ANGLE						(-45)
+#define MAX_ANGLE						(45)
+
 extern RNG_HandleTypeDef hrng;
 extern SPI_HandleTypeDef hspi2;
 extern TIM_HandleTypeDef htim5;

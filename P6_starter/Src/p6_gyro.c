@@ -21,7 +21,7 @@ void gyro_task_init() {
     /* Initialization Error */
     Error_Handler();
   }
-  if (pdPASS != xTaskCreate (gyro_task,	"print", 256, NULL, osPriorityNormal, NULL)) {
+  if (pdPASS != xTaskCreate (gyro_task,	"print", 256, NULL, 2, NULL)) {
     Error_Handler();
   }
 }

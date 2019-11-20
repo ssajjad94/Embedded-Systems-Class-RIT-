@@ -57,15 +57,16 @@
 #include "usart.h"
 #include "gpio.h"
 
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "stdio.h"
 #include "string.h"
 
+#include "timer.h"
 #include "PWM.h"
 #include "servo_computer_task.h"
 #include "servo_user_task.h"
+
 
 /* USER CODE END Includes */
 
@@ -137,6 +138,15 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   gyro_task_init();
+	
+	InitTimer3();
+	InitPWM();
+
+	
+	//USART_Printf("Before user servo task.\n\r");
+	servo_user_task_init("USER SERVO TASK", 0);
+	servo_computer_task_init("USER COMPUTER TASK", 1);
+	//USART_Printf("After user servo task.\n\r");
 
   /* USER CODE END 2 */
 
@@ -150,6 +160,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
   while (1)
   {
     /* USER CODE END WHILE */

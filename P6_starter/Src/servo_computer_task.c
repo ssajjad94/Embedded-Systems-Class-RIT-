@@ -30,9 +30,18 @@ void servo_computer_task(void *parameters)
 	
 	while (1)
 	{
+		// Check the current position from the params
 		uint8_t curr_positon = p->servo_position;
 		
-		SetPWMPulsePosition(p->servo_id, curr_positon);
+		// Set the position
+		if (0 == p->servo_id)
+		{
+			SetPWMPulseWidth1(curr_positon);
+		}
+		else
+		{
+			SetPWMPulseWidth2(curr_positon);
+		}
 	}
 }
 
@@ -79,8 +88,7 @@ void GoToRandomPosition()
 		pos_or_neg = pos_or_neg % 2;
 	}
 	
-		
-	
+
 	if (pos_or_neg)
 	{
 		// Move right
