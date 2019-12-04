@@ -66,7 +66,8 @@
 #include "PWM.h"
 #include "servo_computer_task.h"
 #include "servo_user_task.h"
-
+#include "game_task.h"
+#include "display_task.h"
 
 /* USER CODE END Includes */
 
@@ -142,11 +143,14 @@ int main(void)
 	InitTimer3();
 	InitPWM();
 
+	USART_Printf("Before task inits.\n\r");
 	
-	//USART_Printf("Before user servo task.\n\r");
 	servo_user_task_init("USER SERVO TASK", 0);
 	servo_computer_task_init("USER COMPUTER TASK", 1);
-	//USART_Printf("After user servo task.\n\r");
+	game_task_init("GAME TASK");
+	display_task_init("DISPLAY TASK");
+	
+	USART_Printf("After task inits.\n\r");
 
   /* USER CODE END 2 */
 

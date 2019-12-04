@@ -471,6 +471,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\timer.c</FilePath>
             </File>
+            <File>
+              <FileName>display_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\display_task.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -740,6 +745,11 @@
               <FileName>timer.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Inc\timer.h</FilePath>
+            </File>
+            <File>
+              <FileName>display_task.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\display_task.h</FilePath>
             </File>
           </Files>
         </Group>

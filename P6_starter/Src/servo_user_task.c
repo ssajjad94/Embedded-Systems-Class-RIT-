@@ -43,6 +43,9 @@ void servo_user_task(void *parameters)
 		{
 			SetPWMPulseWidth2(next_position);
 		}
+		
+		// Set the position in the task
+		p->servo_position = next_position;
 	}
 }
 

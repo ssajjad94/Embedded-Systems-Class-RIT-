@@ -10,9 +10,15 @@
 
 #include "PWM.h"
 #include "usart.h"
+#include "timer.h"
 #include "main.h"
+
 #include "servo_user_task.h"
 #include "servo_computer_task.h"
+
+#define TICKS_PER_SECOND				(10000)
+#define MAX_PLAYER_TIME_SEC			(5 * TICKS_PER_SECOND)
+#define UNREASONABLY_LARGE_TIME	(15 * TICKS_PER_SECOND)
 
 typedef struct {
   TaskHandle_t handle; 
@@ -20,7 +26,10 @@ typedef struct {
 
 	// Task parameters
 	float score; 
+	uint32_t levelNum;
 	uint32_t levelStartTime;
+	uint32_t elapsedTime;
+	uint8_t gameoverState;
 	
 } GAME_PARAMS_t;
 
@@ -33,14 +42,14 @@ void game_task_init(char *game_task_name);
 // Updates the display with score, time elapsed, player position, computer position
 void UpdateDisplay(void);
 
-// Checks if the player is out of time
-uint8_t IsPlayerOutOfTime(uint16_t curr_time);
-
 // Checks how much time has passed
-uint16_t GetTimeElapsed(void);
+uint32_t GetTimeElapsed(void);
 
 //
 void StartLevel(void);
+
+// 
+void RestartGame(void);
 
 //@todo add function to check player-computer relative position 
 

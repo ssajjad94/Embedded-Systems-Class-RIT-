@@ -38,8 +38,8 @@ void gyro_task(void* argument) {
       gyro_angle[ii] += (int32_t)(gyro_velocity[ii] / GYRO_THRESHOLD_DETECTION);
     }
 		
-    USART_Printf("Velocity: \t(%d,\t%d,\t%d) \n\r", (int)gyro_velocity[0], (int)gyro_velocity[1], (int)gyro_velocity[2]);
-		USART_Printf("Angle: 	  \t(%d,\t%d,\t%d) \n\r", gyro_angle[0], gyro_angle[1], gyro_angle[2]);
+    // USART_Printf("Velocity: \t(%d,\t%d,\t%d) \n\r", (int)gyro_velocity[0], (int)gyro_velocity[1], (int)gyro_velocity[2]);
+		// USART_Printf("Angle: 	  \t(%d,\t%d,\t%d) \n\r", gyro_angle[0], gyro_angle[1], gyro_angle[2]);
 
     osDelay(50);
   }

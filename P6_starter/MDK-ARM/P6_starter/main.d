@@ -57,9 +57,14 @@ p6_starter\main.o: ../Inc/usart.h
 p6_starter\main.o: ../Inc/gpio.h
 p6_starter\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 p6_starter\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+p6_starter\main.o: ../Inc/timer.h
 p6_starter\main.o: ../Inc/PWM.h
 p6_starter\main.o: ../Inc/servo_computer_task.h
 p6_starter\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 p6_starter\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
 p6_starter\main.o: ../Inc/servo_user_task.h
+p6_starter\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+p6_starter\main.o: ../Inc/game_task.h
+p6_starter\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+p6_starter\main.o: ../Inc/display_task.h
 p6_starter\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
