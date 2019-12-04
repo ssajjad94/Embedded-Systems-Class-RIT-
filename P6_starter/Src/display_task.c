@@ -71,6 +71,8 @@ void display_task(void *parameters)
 		{
 			USART_Printf("          \n\r");
 		}
+		
+		
 	}
 }
 
