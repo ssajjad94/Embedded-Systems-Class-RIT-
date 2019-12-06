@@ -1,3 +1,9 @@
+/*
+	uart.c
+	David Lin
+*/
+
+
 #include "UART.h"
 
 
@@ -111,6 +117,33 @@ uint8_t USART_Read (USART_TypeDef * USARTx) {
 	return (rxChar[0]);
 }
 
+/*
+	Returns a character inputted to the terminal,
+		or null-termination 0x00 if none.
+*/
+uint8_t USART_ReadAsync (USART_TypeDef * USARTx) 
+{
+	uint8_t rxChar[2];
+	rxChar[0] = 0x00;
+	rxChar[1] = 0x00;
+	
+	// SR_RXNE (Read data register not empty) bit is set by hardware
+	if (USARTx->ISR & USART_ISR_RXNE)
+	{
+		// Wait until RXNE (RX not empty) bit is set
+		// USART resets the RXNE flag automatically after reading DR
+		// Reading USART_DR automatically clears the RXNE flag 
+		
+		rxChar[0] = (uint8_t)(USARTx->RDR & 0xFF);
+		rxChar[1] = 0x00;
+	}
+	
+	if (rxChar[0] != '\r')
+		USART_Write(USARTx, rxChar);
+	
+	return (rxChar[0]);
+}
+
 void USART_Write(USART_TypeDef * USARTx, uint8_t *buffer) 
 {
 	int i;
@@ -184,6 +217,22 @@ void USART_WriteUInt32(USART_TypeDef * USARTx, uint32_t num)
   }
 }
 
+void USART_Printf(const char *fmt, ...) 
+{
+	char buffer[BUFFER_SIZE];
+	
+	// create formatted print string
+  // Note: va_list, va_start(), vsnprintf(), va_end() are all part of C standard library
+	va_list argptr;
+	va_start(argptr, fmt);
+  // vsnprintf is kind of like snprintf with indirection to varag stack
+	vsnprintf(buffer, sizeof(buffer), fmt, argptr);
+	va_end(argptr);
+	
+	// send it to the DISCOVERY BOARD serial port (USART2)
+	USART_Write(USART2, (uint8_t *)buffer);
+}
+
 
 /*
 	Prompts the user a given prompt, and loops until a y or n is returned.
@@ -194,14 +243,25 @@ uint8_t PromptYesOrNo(uint8_t* prompt)
 {
 	uint8_t retVal = 0;
 	
+	// Print the prompt
+	PRINT(prompt);
+	
+	uint8_t bFirstIter = 1;
+	
 	// Loop until the user inputs a valid value
 	while (retVal == 0)
 	{
 		// rxByte holds the read char within this scope.
 		char rxByte = 0;
 		
+		if (bFirstIter == 0)
+		{
+			PRINT("\tInvalid input. Please use y or n. ");
+		}
+		
+		bFirstIter = 0;
+		
 		// Try to read an input
-		PRINT(prompt);
 		while (rxByte != '\n' && rxByte != '\r')
 		{
 			rxByte = USART_Read(USART2);
@@ -220,6 +280,26 @@ uint8_t PromptYesOrNo(uint8_t* prompt)
 	
 	return retVal;
 }
+
+
+/*
+	Prompts the user to press <Enter>
+*/
+void PromptEnterToContinue(uint8_t* prompt)
+{
+	// Print the prompt
+	PRINT(prompt);
+	
+	// rxByte holds the read char within this scope.
+	char rxByte = 0;
+	
+	// Try to read an input
+	while (rxByte != '\n' && rxByte != '\r')
+	{
+		rxByte = USART_Read(USART2);
+	}
+}
+
 
 
 void USART_Delay(uint32_t us) {

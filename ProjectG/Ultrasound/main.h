@@ -1,3 +1,9 @@
+/*
+	main.h
+	David Lin
+*/
+
+
 #ifndef MAIN_H
 #define MAIN_H
 
@@ -20,11 +26,14 @@
 #define LOWER_RANGE_LIMIT		(50)
 #define UPPER_RANGE_LIMIT		(1000)
 
+#define POST_VALID_RANGE_MIN			(300)
+#define POST_VALID_RANGE_MAX			(1000)
+
 // How many measurements to make
 #define MEASUREMENT_CNT			(100)
 
 // Prototypes
 void MainProgramLoop(void);
-void POSTTest(void);
+uint8_t POSTTest(void);
 
 #endif

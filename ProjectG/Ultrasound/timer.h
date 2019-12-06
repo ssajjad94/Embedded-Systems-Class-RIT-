@@ -1,7 +1,17 @@
+/*
+	timer.h
+	David Lin
+*/
+
+
 #ifndef TIMER_H
 #define TIMER_H
 
 #include "stm32l476xx.h"
+
+#define MICROSECOND	(1)
+#define MILLISECOND	(1000)
+#define SECOND			(1000 * MILLISECOND)
 
 // Initializes Timer 2 for Ultrasound Capture
 void InitTimerForUltrasound(void);

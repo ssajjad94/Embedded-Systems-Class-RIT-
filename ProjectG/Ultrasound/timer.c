@@ -1,5 +1,10 @@
-#include "stm32l476xx.h"
+/*
+	timer.c
+	David Lin
+*/
 
+
+#include "stm32l476xx.h"
 #include "timer.h"
 
 /*
