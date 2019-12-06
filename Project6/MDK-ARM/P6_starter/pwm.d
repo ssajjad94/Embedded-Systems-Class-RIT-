@@ -1,0 +1,10 @@
+p6_starter\pwm.o: ..\Src\PWM.c
+p6_starter\pwm.o: ../Inc/PWM.h
+p6_starter\pwm.o: ../Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l476xx.h
+p6_starter\pwm.o: ../Drivers/CMSIS/Include/core_cm4.h
+p6_starter\pwm.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+p6_starter\pwm.o: ../Drivers/CMSIS/Include/core_cmInstr.h
+p6_starter\pwm.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
+p6_starter\pwm.o: ../Drivers/CMSIS/Include/core_cmFunc.h
+p6_starter\pwm.o: ../Drivers/CMSIS/Include/core_cmSimd.h
+p6_starter\pwm.o: ../Drivers/CMSIS/Device/ST/STM32L4xx/Include/system_stm32l4xx.h
