@@ -1,0 +1,13 @@
+projectb\uart.o: ..\Src\UART.c
+projectb\uart.o: ../Inc/UART.h
+projectb\uart.o: ../Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l476xx.h
+projectb\uart.o: ../Drivers/CMSIS/Include/core_cm4.h
+projectb\uart.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+projectb\uart.o: ../Drivers/CMSIS/Include/core_cmInstr.h
+projectb\uart.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
+projectb\uart.o: ../Drivers/CMSIS/Include/core_cmFunc.h
+projectb\uart.o: ../Drivers/CMSIS/Include/core_cmSimd.h
+projectb\uart.o: ../Drivers/CMSIS/Device/ST/STM32L4xx/Include/system_stm32l4xx.h
+projectb\uart.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+projectb\uart.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+projectb\uart.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
