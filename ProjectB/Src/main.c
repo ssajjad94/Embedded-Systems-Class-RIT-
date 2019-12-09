@@ -71,6 +71,10 @@ TIM_HandleTypeDef htim3;
 
 /* USER CODE BEGIN PV */
 
+enum SignalType signal_type = SINE;
+double amplitude = 0;
+double frequency = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -85,15 +89,21 @@ static void MX_TIM3_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-float time;
-
 /* USER CODE END 0 */
+
+int main(void)
+{
+	UART2_Init();
+	while(1)
+		USART_Printf("Test.");
+}
+
 
 /**
   * @brief  The application entry point.
   * @retval int
   */
-int main(void)
+int main2(void)
 {
   /* USER CODE BEGIN 1 */
 
@@ -115,6 +125,7 @@ int main(void)
 
   /* USER CODE BEGIN SysInit */
 
+	UART2_Init();
 	
   /* USER CODE END SysInit */
 
@@ -123,21 +134,24 @@ int main(void)
   MX_DAC1_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-
-	UART2_Init();
 	
-	HAL_DAC_Start(&hdac1, DAC_CHANNEL_2);
-	HAL_TIM_Base_Start_IT(&htim3);
+	// HAL_DAC_Start(&hdac1, DAC_CHANNEL_2);
+	// HAL_TIM_Base_Start_IT(&htim3);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-	//float time = 0;
+	
 	USART_Printf("Test.");
+	
+	signal_type = TRIANGLE;
+	amplitude = 3.3;
+	frequency = .1;
+	
   while (1)
   {
-
+	USART_Printf("Test.\n\r");
 		
     /* USER CODE END WHILE */
 
@@ -288,14 +302,69 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-void UpdateSignal()
+void UpdateSignal(uint32_t time)
 {
-		time += .01;
-		float voltage = sin(time) * (3.3 / 2.0) + (3.3 / 2.0);
-		uint8_t value = (uint8_t) ((voltage / 3.3) * 255.0);
-		
-		HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_2, DAC_ALIGN_8B_R, value);
+	USART_Printf("%d\n\r", time);
 	
+	// Calc voltage from -1.65V to 1.65V depending on signal equation. 
+	double voltage = 0;
+	double time_in_sec = ((double) time) / 20000.0;
+	
+	// Limit amplitude to 3.3V
+	if (amplitude > VOLTAGE_RANGE)
+		amplitude = VOLTAGE_RANGE;
+		
+	if (signal_type == SINE)
+	{
+		// Calc sine signal
+		double two_pi = 2.0 * 3.14;
+		double half_amp = amplitude / 2.0;
+		double t = time_in_sec * two_pi * frequency;
+		
+		// Calc voltage from negative half amp to positive half amp
+		voltage = half_amp * sin(t);
+		
+		// Shift from (-half_amp to + half_amp) to (0 to amp)
+		voltage += half_amp;
+	}
+	else if (signal_type == GIBBS_PHENOMENON)
+	{
+		// Calc sine signal
+		double two_pi = 2.0 * 3.14;
+		double half_amp = amplitude / 2.0;
+		double t = time_in_sec * two_pi * frequency;
+		
+		// Calc voltage from negative half amp to positive half amp
+		voltage = half_amp * ( sin(t) + (sin(3.0 * t) / 3.0) 
+							+ (sin(5.0 * t) / 5.0) + (sin(7.0 * t) / 7.0) 
+							+ (sin(9.0 * t) / 9.0) );
+	}
+	else if (signal_type == TRIANGLE)
+	{
+		double period = ((double) 1.0) / frequency;
+		double sectional_time = fmod(time_in_sec, period);
+		if (sectional_time < period/2)
+		{
+			voltage = amplitude - amplitude * ((sectional_time) / (period / 2.0));
+		}
+		else
+		{
+			voltage = amplitude * ((sectional_time) / (period / 2.0) - 1.0);
+		}
+	}
+	else if (signal_type == RAMP)
+	{
+		double period = ((double) 1.0) / frequency;
+		double sectional_time = fmod(time_in_sec, period);
+
+		voltage = amplitude - amplitude * ((sectional_time) / (period));
+	}
+	
+	// Convert value to 8-bit number
+	uint8_t value = (uint8_t) ((voltage / VOLTAGE_RANGE) * 255.0);
+	
+	// Send it over to the DAC
+	HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_2, DAC_ALIGN_8B_R, value);
 }
 
 /* USER CODE END 4 */

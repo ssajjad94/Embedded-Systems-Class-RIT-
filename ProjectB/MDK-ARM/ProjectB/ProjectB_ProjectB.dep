@@ -1,7 +1,7 @@
 Dependencies for Project 'ProjectB', Target 'ProjectB': (DO NOT MODIFY !)
 F (startup_stm32l476xx.s)(0x5DEAF55B)(--cpu Cortex-M4.fp --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_ProjectB-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include--pd "__UVISION_VERSION SETA 525" --pd "_RTE_ SETA 1" --pd "STM32L476xx SETA 1"--list startup_stm32l476xx.lst --xref -o projectb\startup_stm32l476xx.o --depend projectb\startup_stm32l476xx.d)
-F (../Src/main.c)(0x5DEAF955)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_ProjectB-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="525" -D_RTE_ -DSTM32L476xx -DUSE_HAL_DRIVER -DSTM32L476xx-o projectb\main.o --omf_browse projectb\main.crf --depend projectb\main.d)
-I (../Inc/main.h)(0x5DEAF630)
+F (../Src/main.c)(0x5DED9718)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_ProjectB-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="525" -D_RTE_ -DSTM32L476xx -DUSE_HAL_DRIVER -DSTM32L476xx-o projectb\main.o --omf_browse projectb\main.crf --depend projectb\main.d)
+I (../Inc/main.h)(0x5DED8C8D)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h)(0x5DEADC41)
 I (../Inc/stm32l4xx_hal_conf.h)(0x5DEAF557)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h)(0x5DEADC42)
@@ -39,8 +39,8 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599F75EC)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599F75EC)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599F75EA)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x599F75EE)
-F (../Src/stm32l4xx_it.c)(0x5DEAF6AD)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_ProjectB-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="525" -D_RTE_ -DSTM32L476xx -DUSE_HAL_DRIVER -DSTM32L476xx-o projectb\stm32l4xx_it.o --omf_browse projectb\stm32l4xx_it.crf --depend projectb\stm32l4xx_it.d)
-I (../Inc/main.h)(0x5DEAF630)
+F (../Src/stm32l4xx_it.c)(0x5DED8ADD)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_ProjectB-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="525" -D_RTE_ -DSTM32L476xx -DUSE_HAL_DRIVER -DSTM32L476xx-o projectb\stm32l4xx_it.o --omf_browse projectb\stm32l4xx_it.crf --depend projectb\stm32l4xx_it.d)
+I (../Inc/main.h)(0x5DED8C8D)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h)(0x5DEADC41)
 I (../Inc/stm32l4xx_hal_conf.h)(0x5DEAF557)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h)(0x5DEADC42)
@@ -75,7 +75,7 @@ I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim.h)(0x5DEADC43)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h)(0x5DEADC43)
 I (../Inc/stm32l4xx_it.h)(0x5DEAF556)
 F (../Src/stm32l4xx_hal_msp.c)(0x5DEAF557)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_ProjectB-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="525" -D_RTE_ -DSTM32L476xx -DUSE_HAL_DRIVER -DSTM32L476xx-o projectb\stm32l4xx_hal_msp.o --omf_browse projectb\stm32l4xx_hal_msp.crf --depend projectb\stm32l4xx_hal_msp.d)
-I (../Inc/main.h)(0x5DEAF630)
+I (../Inc/main.h)(0x5DED8C8D)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h)(0x5DEADC41)
 I (../Inc/stm32l4xx_hal_conf.h)(0x5DEAF557)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h)(0x5DEADC42)
@@ -108,7 +108,7 @@ I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr.h)(0x5DEADC42)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h)(0x5DEADC42)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim.h)(0x5DEADC43)
 I (../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h)(0x5DEADC43)
-F (..\Src\UART.c)(0x5DEACDD5)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_ProjectB-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="525" -D_RTE_ -DSTM32L476xx -DUSE_HAL_DRIVER -DSTM32L476xx-o projectb\uart.o --omf_browse projectb\uart.crf --depend projectb\uart.d)
+F (..\Src\UART.c)(0x5DED96CB)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc -I ../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_ProjectB-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="525" -D_RTE_ -DSTM32L476xx -DUSE_HAL_DRIVER -DSTM32L476xx-o projectb\uart.o --omf_browse projectb\uart.crf --depend projectb\uart.d)
 I (../Inc/UART.h)(0x5DEACDDB)
 I (../Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l476xx.h)(0x5DEADC3B)
 I (../Drivers/CMSIS/Include/core_cm4.h)(0x5DEADC41)

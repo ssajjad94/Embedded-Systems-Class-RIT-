@@ -58,6 +58,18 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 
+enum SignalType {
+	NONE = 0,
+	RAMP = 1,
+	R = 1,
+	TRIANGLE = 2,
+	T = 2,
+	SINE = 3,
+	S = 3,
+	GIBBS_PHENOMENON = 4,
+	A = 4
+};
+
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -75,12 +87,18 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 
-void UpdateSignal(void);
+void UpdateSignal(uint32_t time);
 
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
 /* USER CODE BEGIN Private defines */
+
+#define VOLTAGE_MIN 	(0.0)
+#define	VOLTAGE_MAX		(3.3)
+#define VOLTAGE_MIDPOINT		( (VOLTAGE_MAX + VOLTAGE_MIN) / (2.0) )
+#define VOLTAGE_RANGE				( VOLTAGE_MAX - VOLTAGE_MIN )
+#define VOLTAGE_MIDRANGE		( VOLTAGE_RANGE / (2.0) )
 
 /* USER CODE END Private defines */
 
