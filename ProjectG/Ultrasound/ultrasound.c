@@ -88,7 +88,7 @@ uint32_t GetUltrasoundMeasurement()
 	}
 	
 		// Wait cycle period
-	WaitTIM3(30 * MILLISECOND);
+	WaitTIM3(CYCLE_PERIOD);
 	
 	// Calc echoPeriod
 	uint32_t echoPeriod = 0;

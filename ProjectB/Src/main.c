@@ -80,6 +80,18 @@ enum SignalType signal_type = SINE;
 double amplitude = 0;
 double frequency = 0;
 
+// Quick test script;
+uint8_t mode = 0;
+	// 0 - amplitude decreasing, frequency same (10Hz)
+	// 1 - amplitude increasing, frequency same (10Hz)
+	// 2 - amplitude same (max), frequency increasing
+	// 3 - amplitude same (max), frequency decreasing
+uint8_t bAmplitudeMode = 0; 	// 0 for NONE, 1 for decreasing, 2 for increasing
+uint8_t bFrequencyMode = 0; 	// 0 for NONE, 1 for decreasing, 2 for increasing
+
+uint32_t iter = 0;
+uint32_t maxiter = 1000;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -133,6 +145,7 @@ int main(void)
   MX_TIM3_Init();
   MX_USART2_UART_Init();
   MX_TIM2_Init();
+	
   /* USER CODE BEGIN 2 */
 	
   MX_USART2_UART_Init();
@@ -146,16 +159,106 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	
+	// Clear display
+	USART_Printf("\033[2J");		// Clear terminal
+	USART_Printf("\033[0;0H");	// Reset cursor to 0,0
 	USART_Printf("Starting program...\n\r");
 	
-	signal_type = SINE;
+	
+	
+	signal_type = GIBBS_PHENOMENON;
 	amplitude = 3.3;
-	frequency = 100;
+	frequency = 10;
+	
+	
+	/*
+	// Quick test script;
+	mode = 0;
+		// 0 - amplitude decreasing, frequency same (10Hz)
+		// 1 - amplitude increasing, frequency same (10Hz)
+		// 2 - amplitude same (max), frequency increasing
+		// 3 - amplitude same (max), frequency decreasing
+	bAmplitudeMode = 0; 	// 0 for NONE, 1 for decreasing, 2 for increasing
+	bFrequencyMode = 0; 	// 0 for NONE, 1 for decreasing, 2 for increasing
+	
+	uint32_t maxiter = 10000;
+	*/
 	
   while (1)
   {
-		// USART_Printf("Test.\n\r");
-		char buffer[2];
+		// USART_Printf("\033[2J");		// Clear terminal
+		// USART_Printf("\033[0;0H");	// Reset cursor to 0,0
+		
+		/*
+		continue;
+		
+		USART_Printf("Amplitude: %f V (%d percent)", amplitude, ((int) amplitude / 3.3));	// Reset cursor to 0,0
+		USART_Printf("Frequency: %f Hz (%d percent)", frequency);	// Reset cursor to 0,0
+		
+		if (mode == 0)
+		{
+			bAmplitudeMode = 1;
+			bFrequencyMode = 0;
+		}
+		else if (mode == 1)
+		{
+			bAmplitudeMode = 2;
+			bFrequencyMode = 0;
+		}
+		else if (mode == 2)
+		{
+			bAmplitudeMode = 0;
+			bFrequencyMode = 2;
+		}
+		else if (mode == 3)
+		{
+			bAmplitudeMode = 0;
+			bFrequencyMode = 1;
+		}
+		
+		for (int i = 0; i < maxiter; i++)
+		{
+			if (bAmplitudeMode == 1)
+			{
+				amplitude  = (3.3) - (3.3) * ( (float) i / (float) maxiter);
+			}
+			else if (bAmplitudeMode == 2)
+			{
+				amplitude  = (3.3) * ( (float) i / (float) maxiter);
+			}
+			
+			if (bFrequencyMode == 1)
+			{
+				frequency  = (10000) - (990) * ( (float) i / (float) maxiter);
+			}
+			else if (bFrequencyMode == 2)
+			{
+				frequency  = (10) + (990) * ( (float) i / (float) maxiter);
+			}
+		}
+		
+		mode += 1;
+		if (mode > 3)
+		{
+			mode = 0;
+			if (signal_type == GIBBS_PHENOMENON)
+				signal_type = RAMP;
+			else if (signal_type == RAMP)
+				signal_type = TRIANGLE;
+			else if (signal_type == TRIANGLE)
+				signal_type = SINE;
+			else if (signal_type == SINE)
+				signal_type = GIBBS_PHENOMENON;
+		}
+		*/
+		
+		
+		
+		
+		
+		
+		
+		
 	
 		//while (!(USART2->ISR & USART_ISR_RXNE));  // Wait until RXNE (RX not empty) bit is set
 		// USART resets the RXNE flag automatically after reading DR
@@ -429,7 +532,8 @@ static void MX_GPIO_Init(void)
 
 void UpdateSignal(uint32_t time)
 {
-	USART_Printf("%d\n\r", time);
+	USART_Printf("%d\n\r", mode);
+	// UpdateCommand();
 	
 	// Calc voltage from -1.65V to 1.65V depending on signal equation. 
 	double voltage = 0;
@@ -494,7 +598,76 @@ void UpdateSignal(uint32_t time)
 
 void UpdateCommand()
 {
-	USART_Printf("In update command.\n\r");
+	// USART_Printf("Amplitude: %f V (%d percent)", amplitude, ((int) amplitude / 3.3));	// Reset cursor to 0,0
+	// USART_Printf("Frequency: %f Hz (%d percent)", frequency);	// Reset cursor to 0,0
+		
+	if (mode == 0)
+	{
+		bAmplitudeMode = 1;
+		bFrequencyMode = 0;
+	}
+	else if (mode == 1)
+	{
+		bAmplitudeMode = 2;
+		bFrequencyMode = 0;
+	}
+	else if (mode == 2)
+	{
+		bAmplitudeMode = 0;
+		bFrequencyMode = 2;
+	}
+	else if (mode == 3)
+	{
+		bAmplitudeMode = 0;
+		bFrequencyMode = 1;
+	}
+		
+	iter += 1;
+	float i = iter;
+	if (bAmplitudeMode == 1)
+	{
+		amplitude  = (3.3) * (1.0 -  (i / ((float) maxiter)));
+	}
+	else if (bAmplitudeMode == 2)
+	{
+		amplitude  = (3.3) * ( i / ((float) maxiter));
+	}
+	else
+	{
+		amplitude = 3.3;
+	}
+	
+	if (bFrequencyMode == 1)
+	{
+		frequency  = (100.0) - (99.0) * ( i / (float) maxiter);
+	}
+	else if (bFrequencyMode == 2)
+	{
+		frequency  = (1.0) + (99.0) * ( i / ((float) maxiter));
+	}
+	else
+	{
+		frequency = 100;
+	}
+	
+	if (iter > maxiter)
+	{
+		iter = 0;
+		
+		mode += 1;
+		if (mode > 3)
+		{
+			mode = 0;
+			if (signal_type == GIBBS_PHENOMENON)
+				signal_type = RAMP;
+			else if (signal_type == RAMP)
+				signal_type = TRIANGLE;
+			else if (signal_type == TRIANGLE)
+				signal_type = SINE;
+			else if (signal_type == SINE)
+				signal_type = GIBBS_PHENOMENON;
+		}
+	}
 }
 
 

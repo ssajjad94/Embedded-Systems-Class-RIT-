@@ -150,6 +150,11 @@ void MainProgramLoop()
 			
 			// USART_Printf("Running avg: %f\n\r", runningAvg);
 		}
+		
+		// Wait so that only 10 measurements are made a second
+		uint32_t wait_time = 100 * MILLISECOND;
+		wait_time = wait_time - (SIGNAL_PERIOD + CYCLE_PERIOD + time);
+		WaitTIM3(wait_time);
 	}
 	
 	// Clean up -> try to find outliers
