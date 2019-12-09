@@ -44,8 +44,10 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-#include "UART.h"
 #include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdarg.h>
 
 /* USER CODE END Includes */
 
@@ -67,7 +69,10 @@
 /* Private variables ---------------------------------------------------------*/
 DAC_HandleTypeDef hdac1;
 
+TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
+
+UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 
@@ -82,6 +87,8 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_DAC1_Init(void);
 static void MX_TIM3_Init(void);
+static void MX_USART2_UART_Init(void);
+static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -91,19 +98,11 @@ static void MX_TIM3_Init(void);
 
 /* USER CODE END 0 */
 
-int main(void)
-{
-	UART2_Init();
-	while(1)
-		USART_Printf("Test.");
-}
-
-
 /**
   * @brief  The application entry point.
   * @retval int
   */
-int main2(void)
+int main(void)
 {
   /* USER CODE BEGIN 1 */
 
@@ -125,7 +124,6 @@ int main2(void)
 
   /* USER CODE BEGIN SysInit */
 
-	UART2_Init();
 	
   /* USER CODE END SysInit */
 
@@ -133,25 +131,64 @@ int main2(void)
   MX_GPIO_Init();
   MX_DAC1_Init();
   MX_TIM3_Init();
+  MX_USART2_UART_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 	
-	// HAL_DAC_Start(&hdac1, DAC_CHANNEL_2);
-	// HAL_TIM_Base_Start_IT(&htim3);
+  MX_USART2_UART_Init();
+	// __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
+	HAL_DAC_Start(&hdac1, DAC_CHANNEL_2);
+	HAL_TIM_Base_Start_IT(&htim3);
+	HAL_TIM_Base_Start_IT(&htim2);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	
-	USART_Printf("Test.");
+	USART_Printf("Starting program...\n\r");
 	
-	signal_type = TRIANGLE;
+	signal_type = SINE;
 	amplitude = 3.3;
-	frequency = .1;
+	frequency = 100;
 	
   while (1)
   {
-	USART_Printf("Test.\n\r");
+		// USART_Printf("Test.\n\r");
+		char buffer[2];
+	
+		//while (!(USART2->ISR & USART_ISR_RXNE));  // Wait until RXNE (RX not empty) bit is set
+		// USART resets the RXNE flag automatically after reading DR
+		//uint8_t rxChar[2];
+		//rxChar[0] = (uint8_t)(USART2->RDR & 0xFF);
+		//rxChar[1] = 0x00;
+		
+		//USART_Printf("Testing... \n\r");
+		
+		/*
+		// send it to the DISCOVERY BOARD serial port (USART2)
+		HAL_UART_Receive_IT(&huart2, (uint8_t *)buffer, strlen(buffer));
+		HAL_UART_Transmit(&huart2, (uint8_t *)buffer, strlen(buffer), 100);
+		
+		if (buffer[0] == 'R')
+		{
+			signal_type = RAMP;
+		}
+		else if (buffer[0] == 'T')
+		{
+			signal_type = TRIANGLE;
+		}
+		else if (buffer[0] == 'S')
+		{
+			signal_type = SINE;
+		}
+		else if (buffer[0] == 'A')
+		{
+			signal_type = GIBBS_PHENOMENON;
+		}
+		*/
+		
+		// USART_Printf(buffer);
 		
     /* USER CODE END WHILE */
 
@@ -168,6 +205,7 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
   /**Initializes the CPU, AHB and APB busses clocks 
   */
@@ -190,6 +228,12 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART2;
+  PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     Error_Handler();
   }
@@ -243,6 +287,51 @@ static void MX_DAC1_Init(void)
 }
 
 /**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 3999;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 20000;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
+
+}
+
+/**
   * @brief TIM3 Initialization Function
   * @param None
   * @retval None
@@ -288,6 +377,41 @@ static void MX_TIM3_Init(void)
 }
 
 /**
+  * @brief USART2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART2_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART2_Init 0 */
+
+  /* USER CODE END USART2_Init 0 */
+
+  /* USER CODE BEGIN USART2_Init 1 */
+
+  /* USER CODE END USART2_Init 1 */
+  huart2.Instance = USART2;
+  huart2.Init.BaudRate = 115200;
+  huart2.Init.WordLength = UART_WORDLENGTH_8B;
+  huart2.Init.StopBits = UART_STOPBITS_1;
+  huart2.Init.Parity = UART_PARITY_NONE;
+  huart2.Init.Mode = UART_MODE_TX_RX;
+  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  if (HAL_UART_Init(&huart2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART2_Init 2 */
+
+  /* USER CODE END USART2_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -297,6 +421,7 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
 
 }
 
@@ -366,6 +491,28 @@ void UpdateSignal(uint32_t time)
 	// Send it over to the DAC
 	HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_2, DAC_ALIGN_8B_R, value);
 }
+
+void UpdateCommand()
+{
+	USART_Printf("In update command.\n\r");
+}
+
+
+void USART_Printf(const char *fmt, ...) {
+	char buffer[110];
+	
+	// create formatted print string
+  // Note: va_list, va_start(), vsnprintf(), va_end() are all part of C standard library
+	va_list argptr;
+	va_start(argptr, fmt);
+  // vsnprintf is kind of like snprintf with indirection to varag stack
+	vsnprintf(buffer, sizeof(buffer), fmt, argptr);
+	va_end(argptr);
+	
+	// send it to the DISCOVERY BOARD serial port (USART2)
+	HAL_UART_Transmit(&huart2, (uint8_t *)buffer, strlen(buffer), 100);
+}
+
 
 /* USER CODE END 4 */
 

@@ -33,8 +33,9 @@ projectb\main.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr.h
 projectb\main.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h
 projectb\main.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim.h
 projectb\main.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h
-projectb\main.o: ../Inc/UART.h
+projectb\main.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h
+projectb\main.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h
+projectb\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 projectb\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 projectb\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 projectb\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
-projectb\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h

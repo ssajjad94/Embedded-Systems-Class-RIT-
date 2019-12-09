@@ -88,6 +88,8 @@ void Error_Handler(void);
 /* USER CODE BEGIN EFP */
 
 void UpdateSignal(uint32_t time);
+void UpdateCommand(void);
+void USART_Printf(const char *fmt, ...);
 
 /* USER CODE END EFP */
 

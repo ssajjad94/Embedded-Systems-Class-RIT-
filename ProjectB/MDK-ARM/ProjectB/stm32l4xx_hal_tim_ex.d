@@ -32,3 +32,5 @@ projectb\stm32l4xx_hal_tim_ex.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_h
 projectb\stm32l4xx_hal_tim_ex.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h
 projectb\stm32l4xx_hal_tim_ex.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim.h
 projectb\stm32l4xx_hal_tim_ex.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h
+projectb\stm32l4xx_hal_tim_ex.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h
+projectb\stm32l4xx_hal_tim_ex.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h
